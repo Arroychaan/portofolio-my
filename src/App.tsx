@@ -1,17 +1,44 @@
 import React, { useState } from 'react';
-import emailIcon from './assets/email.png';
 import githubIcon from './assets/github-logo-png_seeklogo-304612.png';
 import linkedinIcon from './assets/linkedin.png';
 import instagramIcon from './assets/instagram.png';
 import aboutPhoto from './assets/fotobawah.jpg';
 
+
 const App = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
-  // Form submission handler (simple local feedback)
-  const handleSubmit = (e: React.FormEvent) => {
+  const [formStatus, setFormStatus] = useState<'idle' | 'submitting' | 'success' | 'error'>('idle');
+
+  // Async Web3Forms handler
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    alert('Pesan terkirim! Terima kasih telah menghubungi saya.');
+    setFormStatus('submitting');
+
+    const formData = new FormData(e.currentTarget);
+
+    try {
+      const response = await fetch('https://api.web3forms.com/submit', {
+        method: 'POST',
+        body: formData
+      });
+
+      const data = await response.json();
+
+      if (data.success) {
+        setFormStatus('success');
+        e.currentTarget.reset();
+        setTimeout(() => setFormStatus('idle'), 3500);
+      } else {
+        setFormStatus('error');
+        alert(data.message || 'Gagal mengirim pesan. Silakan coba lagi.');
+        setTimeout(() => setFormStatus('idle'), 3500);
+      }
+    } catch (error) {
+      setFormStatus('error');
+      alert('Terjadi kesalahan koneksi. Silakan periksa koneksi internet Anda.');
+      setTimeout(() => setFormStatus('idle'), 3500);
+    }
   };
 
   return (
@@ -537,9 +564,13 @@ const App = () => {
             </div>
           </div>
 
-          {/* Right Column (60%) - Form */}
           <div className="flex-[3] bg-[#fafaf9] border-4 border-black p-6 md:p-8 shadow-[8px_8px_0_0_#000]">
             <form onSubmit={handleSubmit} className="space-y-6 font-mono text-sm">
+              {/* Web3Forms Configurations */}
+              <input type="hidden" name="access_key" value="c8399c3d-17c5-49c2-9432-d09aab289e5c" />
+              <input type="hidden" name="subject" value="Pesan Baru dari Portofolio arrnco.com" />
+              <input type="hidden" name="from_name" value="Kontak Portofolio" />
+              
               <div>
                 <label htmlFor="name" className="block text-xs font-bold uppercase tracking-wider text-stone-500 mb-2">
                   Nama Anda
@@ -547,6 +578,7 @@ const App = () => {
                 <input
                   type="text"
                   id="name"
+                  name="name"
                   required
                   placeholder="ACHMAD ROYCHAN"
                   className="w-full border-2 border-black p-3 bg-stone-50 focus:outline-none focus:bg-white focus:ring-2 focus:ring-stone-400 placeholder-stone-400 text-stone-900 font-bold uppercase rounded-none"
@@ -560,6 +592,7 @@ const App = () => {
                 <input
                   type="email"
                   id="email"
+                  name="email"
                   required
                   placeholder="USER@DOMAIN.COM"
                   className="w-full border-2 border-black p-3 bg-stone-50 focus:outline-none focus:bg-white focus:ring-2 focus:ring-stone-400 placeholder-stone-400 text-stone-900 font-bold uppercase rounded-none"
@@ -572,6 +605,7 @@ const App = () => {
                 </label>
                 <textarea
                   id="message"
+                  name="message"
                   rows={5}
                   required
                   placeholder="TULISKAN DETAIL PROYEK ATAU PESAN..."
@@ -581,9 +615,20 @@ const App = () => {
 
               <button
                 type="submit"
-                className="w-full border-2 border-black bg-black text-white hover:bg-stone-100 hover:text-black p-4 font-bold uppercase transition-all shadow-[4px_4px_0_0_#78716c] hover:shadow-none translate-y-0 active:translate-y-1"
+                disabled={formStatus === 'submitting'}
+                className={`w-full border-2 border-black p-4 font-bold uppercase transition-all shadow-[4px_4px_0_0_#78716c] hover:shadow-none translate-y-0 active:translate-y-1 ${
+                  formStatus === 'submitting'
+                    ? 'bg-stone-300 text-stone-600 cursor-not-allowed shadow-none translate-y-1'
+                    : formStatus === 'success'
+                    ? 'bg-green-600 text-white border-green-700'
+                    : 'bg-black text-white hover:bg-stone-100 hover:text-black'
+                }`}
               >
-                KIRIM PESAN ↗
+                {formStatus === 'submitting'
+                  ? 'MENGIRIM...'
+                  : formStatus === 'success'
+                  ? 'TERKIRIM ✓'
+                  : 'KIRIM PESAN ↗'}
               </button>
             </form>
           </div>
