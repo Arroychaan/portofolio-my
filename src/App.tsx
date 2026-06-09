@@ -3,16 +3,6 @@ import githubIcon from './assets/github-logo-png_seeklogo-304612.png';
 import linkedinIcon from './assets/linkedin.png';
 import instagramIcon from './assets/instagram.png';
 import aboutPhoto from './assets/fotobawah.jpg';
-import htmlLogo from './assets/HTML.jpg';
-import cssLogo from './assets/CSS.jpg';
-import reactLogo from './assets/logo-react.jpg';
-import nextjsLogo from './assets/nextjs.png';
-import tsLogo from './assets/typescript.png';
-import tailwindLogo from './assets/tailwindlogo.png';
-import nodejsLogo from './assets/nodejslogo.png';
-import postgresLogo from './assets/postgresql.png';
-import javaLogo from './assets/JAVALOGO.png';
-import cppLogo from './assets/c++.png';
 
 
 
@@ -518,7 +508,9 @@ const App = () => {
               {/* HTML */}
               <div className="flex flex-col items-center group">
                 <div className="w-16 h-16 flex items-center justify-center border-2 border-transparent group-hover:border-black transition-all p-2 bg-transparent shadow-none group-hover:shadow-[4px_4px_0_0_#000]">
-                  <img src={htmlLogo} alt="HTML" className="max-w-full max-h-full object-contain grayscale group-hover:grayscale-0 transition-all duration-300 mix-blend-multiply" />
+                  <svg className="w-12 h-12 text-stone-400 group-hover:text-black transition-colors duration-300" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M1.5 0h21l-1.91 21.563L11.977 24l-8.564-2.438L1.5 0zm7.031 9.75l-.232-2.662 11.233-.002.242-2.61H5.45l.697 8.01h8.181l-.27 3.012-2.074.562-2.062-.567-.132-1.503H6.945l.255 3.053 4.787 1.328 4.793-1.328.625-7.007H8.531z" />
+                  </svg>
                 </div>
                 <span className="mt-3 font-mono text-[11px] font-bold uppercase text-stone-700 tracking-wider">HTML</span>
               </div>
@@ -526,7 +518,9 @@ const App = () => {
               {/* CSS */}
               <div className="flex flex-col items-center group">
                 <div className="w-16 h-16 flex items-center justify-center border-2 border-transparent group-hover:border-black transition-all p-2 bg-transparent shadow-none group-hover:shadow-[4px_4px_0_0_#000]">
-                  <img src={cssLogo} alt="CSS" className="max-w-full max-h-full object-contain grayscale group-hover:grayscale-0 transition-all duration-300 mix-blend-multiply" />
+                  <svg className="w-12 h-12 text-stone-400 group-hover:text-black transition-colors duration-300" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M1.5 0h21l-1.91 21.563L11.977 24l-8.565-2.438L1.5 0zm5.09 8.766L6.23 4.88h11.54l-.24 2.61H9.1l.23 2.62h8.21l-.73 8.16-4.83 1.34-4.82-1.34-.31-3.52h2.62l.15 1.7 2.36.64 2.37-.64.26-2.91H6.59z" />
+                  </svg>
                 </div>
                 <span className="mt-3 font-mono text-[11px] font-bold uppercase text-stone-700 tracking-wider">CSS</span>
               </div>
@@ -534,7 +528,12 @@ const App = () => {
               {/* React.js */}
               <div className="flex flex-col items-center group">
                 <div className="w-16 h-16 flex items-center justify-center border-2 border-transparent group-hover:border-black transition-all p-2 bg-transparent shadow-none group-hover:shadow-[4px_4px_0_0_#000]">
-                  <img src={reactLogo} alt="React" className="max-w-full max-h-full object-contain grayscale group-hover:grayscale-0 transition-all duration-300 mix-blend-multiply" />
+                  <svg className="w-12 h-12 text-stone-400 group-hover:text-black transition-colors duration-300" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                    <ellipse cx="12" cy="12" rx="11" ry="4.2" transform="rotate(0 12 12)" />
+                    <ellipse cx="12" cy="12" rx="11" ry="4.2" transform="rotate(60 12 12)" />
+                    <ellipse cx="12" cy="12" rx="11" ry="4.2" transform="rotate(120 12 12)" />
+                    <circle cx="12" cy="12" r="2" fill="currentColor" />
+                  </svg>
                 </div>
                 <span className="mt-3 font-mono text-[11px] font-bold uppercase text-stone-700 tracking-wider">React.js</span>
               </div>
@@ -542,7 +541,9 @@ const App = () => {
               {/* Next.js */}
               <div className="flex flex-col items-center group">
                 <div className="w-16 h-16 flex items-center justify-center border-2 border-transparent group-hover:border-black transition-all p-2 bg-transparent shadow-none group-hover:shadow-[4px_4px_0_0_#000]">
-                  <img src={nextjsLogo} alt="Next.js" className="max-w-full max-h-full object-contain grayscale group-hover:grayscale-0 transition-all duration-300 mix-blend-multiply" />
+                  <svg className="w-12 h-12 text-stone-400 group-hover:text-black transition-colors duration-300" viewBox="0 0 180 180" fill="currentColor">
+                    <path d="M90 0C40.29 0 0 40.29 0 90s40.29 90 90 90 90-40.29 90-90S139.71 0 90 0z M141.52 142.38l-46.68-60.07v60.07h-11.4V52.88h11.4l46.68 60.07V52.88h11.4v89.5h-11.4z" />
+                  </svg>
                 </div>
                 <span className="mt-3 font-mono text-[11px] font-bold uppercase text-stone-700 tracking-wider">Next.js</span>
               </div>
@@ -550,7 +551,9 @@ const App = () => {
               {/* TypeScript */}
               <div className="flex flex-col items-center group">
                 <div className="w-16 h-16 flex items-center justify-center border-2 border-transparent group-hover:border-black transition-all p-2 bg-transparent shadow-none group-hover:shadow-[4px_4px_0_0_#000]">
-                  <img src={tsLogo} alt="TypeScript" className="max-w-full max-h-full object-contain grayscale group-hover:grayscale-0 transition-all duration-300 mix-blend-multiply" />
+                  <svg className="w-12 h-12 text-stone-400 group-hover:text-black transition-colors duration-300" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M0 0h24v24H0V0zm22.42 18.7c-.12-1-.62-1.88-2-2.33-1.12-.39-2.12-.59-2.62-1.09-.24-.26-.35-.61-.35-1.04 0-.68.52-1.13 1.34-1.13.79 0 1.25.32 1.55.93L22.2 12.8c-.53-1-1.53-1.84-3.23-1.84-2.28 0-3.9 1.48-3.9 3.61 0 2.22 1.35 3.19 3.75 4.1 1.29.5 1.76.85 1.95 1.48.24.63.09 1.35-.58 1.76-.51.34-1.29.43-1.92.17-.79-.33-1.25-1-1.48-1.74l-2.69.8c.41 1.83 1.9 2.93 4.21 2.93 2.65 0 4.54-1.4 4.54-3.8 0-1.13-.53-2.14-1.56-2.58zM12.92 11h-9v2.54h3.19v10h2.62v-10h3.19V11z" />
+                  </svg>
                 </div>
                 <span className="mt-3 font-mono text-[11px] font-bold uppercase text-stone-700 tracking-wider">TypeScript</span>
               </div>
@@ -558,7 +561,9 @@ const App = () => {
               {/* Tailwind CSS */}
               <div className="flex flex-col items-center group">
                 <div className="w-16 h-16 flex items-center justify-center border-2 border-transparent group-hover:border-black transition-all p-2 bg-transparent shadow-none group-hover:shadow-[4px_4px_0_0_#000]">
-                  <img src={tailwindLogo} alt="Tailwind CSS" className="max-w-full max-h-full object-contain grayscale group-hover:grayscale-0 transition-all duration-300 mix-blend-multiply" />
+                  <svg className="w-12 h-12 text-stone-400 group-hover:text-black transition-colors duration-300" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M12.001 4.8c-3.2 0-5.2 1.6-6 4.8 1.2-1.6 2.6-2.2 4.2-1.8.913.228 1.565.89 2.288 1.624C13.666 10.618 15.027 12 18.001 12c3.2 0 5.2-1.6 6-4.8-1.2 1.6-2.6 2.2-4.2 1.8-.913-.228-1.565-.89-2.288-1.624C16.337 6.182 14.976 4.8 12.001 4.8zm-6 7.2c-3.2 0-5.2 1.6-6 4.8 1.2-1.6 2.6-2.2 4.2-1.8.913.228 1.565.89 2.288 1.624C7.666 17.818 9.027 19 12.001 19c3.2 0 5.2-1.6 6-4.8-1.2 1.6-2.6 2.2-4.2 1.8-.913-.228-1.565-.89-2.288-1.624C10.337 13.382 8.976 12 6.001 12z" />
+                  </svg>
                 </div>
                 <span className="mt-3 font-mono text-[11px] font-bold uppercase text-stone-700 tracking-wider">Tailwind CSS</span>
               </div>
@@ -566,7 +571,9 @@ const App = () => {
               {/* Node.js */}
               <div className="flex flex-col items-center group">
                 <div className="w-16 h-16 flex items-center justify-center border-2 border-transparent group-hover:border-black transition-all p-2 bg-transparent shadow-none group-hover:shadow-[4px_4px_0_0_#000]">
-                  <img src={nodejsLogo} alt="Node.js" className="max-w-full max-h-full object-contain grayscale group-hover:grayscale-0 transition-all duration-300 mix-blend-multiply" />
+                  <svg className="w-12 h-12 text-stone-400 group-hover:text-black transition-colors duration-300" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M11.9 1c-.1 0-.3.1-.4.2l-9.8 5.7c-.2.1-.3.3-.3.5v11.3c0 .2.1.4.3.5l9.8 5.7c.1.1.3.1.4.1.1 0 .3 0 .4-.1l9.8-5.7c.2-.1.3-.3.3-.5V7.4c0-.2-.1-.4-.3-.5L12.3 1.2c-.1-.1-.3-.2-.4-.2zm-1.1 5.9c.5.5.8 1.2.8 2.1v2.1c0 1.2-.7 2-1.8 2.3v.1c.8.3 1.2 1 1.2 2v2c0 .9-.3 1.6-.8 2.1l-.8-.8c.4-.4.6-.9.6-1.5v-1.9c0-1.1-.6-1.7-1.7-1.7h-.6v5.2H6.5V6.1h2.2c1 0 1.7.6 1.7 1.7v1.1c0 .6-.2 1.1-.6 1.5v.1c.5-.4.8-.9.8-1.5V7.4c0-.9-.3-1.6-.8-2.1l.8-.8zM19 14.8v2.1c0 1-.4 1.7-1 2.2l-.7-.7c.4-.4.6-.9.6-1.5v-1.9c0-1.1-.6-1.7-1.7-1.7h-.6v5.2h-1.2V6.1h2.2c1 0 1.7.6 1.7 1.7v1.1c0 .6-.2 1.1-.6 1.5v.1c.5-.4.8-.9.8-1.5V7.8c0-.9-.3-1.6-.8-2.1l.7-.7c.5.5.9 1.2.9 2.1v2.1c0 1.2-.7 2-1.8 2.3v.1c.8.3 1.2 1 1.2 2z" />
+                  </svg>
                 </div>
                 <span className="mt-3 font-mono text-[11px] font-bold uppercase text-stone-700 tracking-wider">Node.js</span>
               </div>
@@ -574,7 +581,9 @@ const App = () => {
               {/* PostgreSQL */}
               <div className="flex flex-col items-center group">
                 <div className="w-16 h-16 flex items-center justify-center border-2 border-transparent group-hover:border-black transition-all p-2 bg-transparent shadow-none group-hover:shadow-[4px_4px_0_0_#000]">
-                  <img src={postgresLogo} alt="PostgreSQL" className="max-w-full max-h-full object-contain grayscale group-hover:grayscale-0 transition-all duration-300 mix-blend-multiply" />
+                  <svg className="w-12 h-12 text-stone-400 group-hover:text-black transition-colors duration-300" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M12 2C6.48 2 2 3.8 2 6v12c0 2.2 4.48 4 10 4s10-1.8 10-4V6c0-2.2-4.48-4-10-4zm0 2c4.82 0 8 1.34 8 2s-3.18 2-8 2-8-1.34-8-2 3.18-2 8-2zm8 4v3c0 .66-3.18 2-8 2s-8-1.34-8-2V8c1.6 1.18 4.63 2 8 2s6.4-1.02 8-2zm0 5v3c0 .66-3.18 2-8 2s-8-1.34-8-2v-3c1.6 1.18 4.63 2 8 2s6.4-1.02 8-2z" />
+                  </svg>
                 </div>
                 <span className="mt-3 font-mono text-[11px] font-bold uppercase text-stone-700 tracking-wider">PostgreSQL</span>
               </div>
@@ -582,7 +591,13 @@ const App = () => {
               {/* Java */}
               <div className="flex flex-col items-center group">
                 <div className="w-16 h-16 flex items-center justify-center border-2 border-transparent group-hover:border-black transition-all p-2 bg-transparent shadow-none group-hover:shadow-[4px_4px_0_0_#000]">
-                  <img src={javaLogo} alt="Java" className="max-w-full max-h-full object-contain grayscale group-hover:grayscale-0 transition-all duration-300 mix-blend-multiply" />
+                  <svg className="w-12 h-12 text-stone-400 group-hover:text-black transition-colors duration-300" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M18 8h1a4 4 0 0 1 0 8h-1" />
+                    <path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z" />
+                    <line x1="6" y1="1" x2="6" y2="4" />
+                    <line x1="10" y1="1" x2="10" y2="4" />
+                    <line x1="14" y1="1" x2="14" y2="4" />
+                  </svg>
                 </div>
                 <span className="mt-3 font-mono text-[11px] font-bold uppercase text-stone-700 tracking-wider">Java</span>
               </div>
@@ -590,7 +605,9 @@ const App = () => {
               {/* C++ */}
               <div className="flex flex-col items-center group">
                 <div className="w-16 h-16 flex items-center justify-center border-2 border-transparent group-hover:border-black transition-all p-2 bg-transparent shadow-none group-hover:shadow-[4px_4px_0_0_#000]">
-                  <img src={cppLogo} alt="C++" className="max-w-full max-h-full object-contain grayscale group-hover:grayscale-0 transition-all duration-300 mix-blend-multiply" />
+                  <svg className="w-12 h-12 text-stone-400 group-hover:text-black transition-colors duration-300" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1.79 13.91c-.48.33-1.08.49-1.82.49-1.28 0-2.22-.52-2.82-1.57-.6-1.05-.9-2.5-.9-4.35 0-1.88.3-3.35.9-4.4C6.19 5.53 7.13 5 8.39 5c.74 0 1.34.16 1.82.49v2.54c-.45-.31-.93-.46-1.42-.46-.66 0-1.17.26-1.52.79-.35.53-.53 1.38-.53 2.54 0 1.2.18 2.08.53 2.62.35.54.86.81 1.52.81.49 0 .97-.15 1.42-.46v2.54zm5.79-3.41h-2v2h-1v-2h-2v-1h2v-2h1v2h2v1zm4 0h-2v2h-1v-2h-2v-1h2v-2h1v2h2v1z" />
+                  </svg>
                 </div>
                 <span className="mt-3 font-mono text-[11px] font-bold uppercase text-stone-700 tracking-wider">C++</span>
               </div>
