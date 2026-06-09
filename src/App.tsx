@@ -3,6 +3,17 @@ import githubIcon from './assets/github-logo-png_seeklogo-304612.png';
 import linkedinIcon from './assets/linkedin.png';
 import instagramIcon from './assets/instagram.png';
 import aboutPhoto from './assets/fotobawah.jpg';
+import htmlLogo from './assets/HTML.jpg';
+import cssLogo from './assets/CSS.jpg';
+import reactLogo from './assets/logo-react.jpg';
+import nextjsLogo from './assets/nextjs.png';
+import tsLogo from './assets/typescript.png';
+import tailwindLogo from './assets/tailwindlogo.png';
+import nodejsLogo from './assets/nodejslogo.png';
+import postgresLogo from './assets/postgresql.png';
+import javaLogo from './assets/JAVALOGO.png';
+import cppLogo from './assets/.png';
+
 
 
 const App = () => {
@@ -476,34 +487,17 @@ const App = () => {
               <p className="font-mono text-stone-600 leading-relaxed text-sm md:text-base uppercase">
                 Dengan pengalaman mengintegrasikan berbagai framework web modern dan arsitektur database, saya berkomitmen menciptakan aplikasi berkinerja tinggi yang andal, aman, dan mudah dikelola.
               </p>
-
-              {/* Skills Toolkit Sub-Grid */}
-              <div className="pt-6">
-                <h3 className="font-mono text-xs font-black uppercase text-stone-500 mb-4 tracking-wider">
-                  [ TOOLKIT_LISTING: ]
-                </h3>
-                <div className="flex flex-wrap gap-2.5 font-mono text-sm">
-                  <span className="border border-black bg-stone-200 px-2 py-1 font-bold text-black">[ REACT.JS ]</span>
-                  <span className="border border-black bg-stone-200 px-2 py-1 font-bold text-black">[ NEXT.JS ]</span>
-                  <span className="border border-black bg-stone-200 px-2 py-1 font-bold text-black">[ TYPESCRIPT ]</span>
-                  <span className="border border-black bg-stone-200 px-2 py-1 font-bold text-black">[ TAILWIND CSS ]</span>
-                  <span className="border border-black bg-stone-200 px-2 py-1 font-bold text-black">[ NODE.JS ]</span>
-                  <span className="border border-black bg-stone-200 px-2 py-1 font-bold text-black">[ POSTGRESQL ]</span>
-                  <span className="border border-black bg-stone-200 px-2 py-1 font-bold text-black">[ COMPILER DESIGN ]</span>
-                  <span className="border border-black bg-stone-200 px-2 py-1 font-bold text-black">[ GIT / DOCKER ]</span>
-                </div>
-              </div>
             </div>
 
             {/* About Photo Panel (30%) */}
             <div className="flex-[2] flex items-center justify-center w-full">
-              <div
+              <div 
                 className="w-full max-w-[280px] aspect-square border-4 border-black bg-stone-100 relative select-none"
                 style={{ boxShadow: '8px 8px 0 0 #000' }}
               >
-                <img
-                  src={aboutPhoto}
-                  alt="Tentang Achmad"
+                <img 
+                  src={aboutPhoto} 
+                  alt="Tentang Achmad" 
                   className="absolute inset-0 w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-300 pointer-events-none"
                 />
                 <div className="absolute top-2 left-2 bg-black text-white font-mono text-[10px] px-2 py-0.5 border border-white">
@@ -513,6 +507,96 @@ const App = () => {
             </div>
 
           </div>
+
+          {/* Full-width Toolkit Grid */}
+          <div className="mt-20 border-t-2 border-dashed border-stone-300 pt-16">
+            <h3 className="font-mono text-xs font-black uppercase text-stone-500 mb-10 tracking-wider">
+              [ MY_TOOLKIT_RESOURCES: ]
+            </h3>
+            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-y-12 gap-x-6 text-center select-none">
+              
+              {/* HTML */}
+              <div className="flex flex-col items-center group">
+                <div className="w-16 h-16 flex items-center justify-center border-2 border-transparent group-hover:border-black transition-all p-2 bg-white shadow-none group-hover:shadow-[4px_4px_0_0_#000]">
+                  <img src={htmlLogo} alt="HTML" className="max-w-full max-h-full object-contain grayscale group-hover:grayscale-0 transition-all duration-300" />
+                </div>
+                <span className="mt-3 font-mono text-[11px] font-bold uppercase text-stone-700 tracking-wider">HTML</span>
+              </div>
+
+              {/* CSS */}
+              <div className="flex flex-col items-center group">
+                <div className="w-16 h-16 flex items-center justify-center border-2 border-transparent group-hover:border-black transition-all p-2 bg-white shadow-none group-hover:shadow-[4px_4px_0_0_#000]">
+                  <img src={cssLogo} alt="CSS" className="max-w-full max-h-full object-contain grayscale group-hover:grayscale-0 transition-all duration-300" />
+                </div>
+                <span className="mt-3 font-mono text-[11px] font-bold uppercase text-stone-700 tracking-wider">CSS</span>
+              </div>
+
+              {/* React.js */}
+              <div className="flex flex-col items-center group">
+                <div className="w-16 h-16 flex items-center justify-center border-2 border-transparent group-hover:border-black transition-all p-2 bg-white shadow-none group-hover:shadow-[4px_4px_0_0_#000]">
+                  <img src={reactLogo} alt="React" className="max-w-full max-h-full object-contain grayscale group-hover:grayscale-0 transition-all duration-300" />
+                </div>
+                <span className="mt-3 font-mono text-[11px] font-bold uppercase text-stone-700 tracking-wider">React.js</span>
+              </div>
+
+              {/* Next.js */}
+              <div className="flex flex-col items-center group">
+                <div className="w-16 h-16 flex items-center justify-center border-2 border-transparent group-hover:border-black transition-all p-2 bg-white shadow-none group-hover:shadow-[4px_4px_0_0_#000]">
+                  <img src={nextjsLogo} alt="Next.js" className="max-w-full max-h-full object-contain grayscale group-hover:grayscale-0 transition-all duration-300" />
+                </div>
+                <span className="mt-3 font-mono text-[11px] font-bold uppercase text-stone-700 tracking-wider">Next.js</span>
+              </div>
+
+              {/* TypeScript */}
+              <div className="flex flex-col items-center group">
+                <div className="w-16 h-16 flex items-center justify-center border-2 border-transparent group-hover:border-black transition-all p-2 bg-white shadow-none group-hover:shadow-[4px_4px_0_0_#000]">
+                  <img src={tsLogo} alt="TypeScript" className="max-w-full max-h-full object-contain grayscale group-hover:grayscale-0 transition-all duration-300" />
+                </div>
+                <span className="mt-3 font-mono text-[11px] font-bold uppercase text-stone-700 tracking-wider">TypeScript</span>
+              </div>
+
+              {/* Tailwind CSS */}
+              <div className="flex flex-col items-center group">
+                <div className="w-16 h-16 flex items-center justify-center border-2 border-transparent group-hover:border-black transition-all p-2 bg-white shadow-none group-hover:shadow-[4px_4px_0_0_#000]">
+                  <img src={tailwindLogo} alt="Tailwind CSS" className="max-w-full max-h-full object-contain grayscale group-hover:grayscale-0 transition-all duration-300" />
+                </div>
+                <span className="mt-3 font-mono text-[11px] font-bold uppercase text-stone-700 tracking-wider">Tailwind CSS</span>
+              </div>
+
+              {/* Node.js */}
+              <div className="flex flex-col items-center group">
+                <div className="w-16 h-16 flex items-center justify-center border-2 border-transparent group-hover:border-black transition-all p-2 bg-white shadow-none group-hover:shadow-[4px_4px_0_0_#000]">
+                  <img src={nodejsLogo} alt="Node.js" className="max-w-full max-h-full object-contain grayscale group-hover:grayscale-0 transition-all duration-300" />
+                </div>
+                <span className="mt-3 font-mono text-[11px] font-bold uppercase text-stone-700 tracking-wider">Node.js</span>
+              </div>
+
+              {/* PostgreSQL */}
+              <div className="flex flex-col items-center group">
+                <div className="w-16 h-16 flex items-center justify-center border-2 border-transparent group-hover:border-black transition-all p-2 bg-white shadow-none group-hover:shadow-[4px_4px_0_0_#000]">
+                  <img src={postgresLogo} alt="PostgreSQL" className="max-w-full max-h-full object-contain grayscale group-hover:grayscale-0 transition-all duration-300" />
+                </div>
+                <span className="mt-3 font-mono text-[11px] font-bold uppercase text-stone-700 tracking-wider">PostgreSQL</span>
+              </div>
+
+              {/* Java */}
+              <div className="flex flex-col items-center group">
+                <div className="w-16 h-16 flex items-center justify-center border-2 border-transparent group-hover:border-black transition-all p-2 bg-white shadow-none group-hover:shadow-[4px_4px_0_0_#000]">
+                  <img src={javaLogo} alt="Java" className="max-w-full max-h-full object-contain grayscale group-hover:grayscale-0 transition-all duration-300" />
+                </div>
+                <span className="mt-3 font-mono text-[11px] font-bold uppercase text-stone-700 tracking-wider">Java</span>
+              </div>
+
+              {/* C++ */}
+              <div className="flex flex-col items-center group">
+                <div className="w-16 h-16 flex items-center justify-center border-2 border-transparent group-hover:border-black transition-all p-2 bg-white shadow-none group-hover:shadow-[4px_4px_0_0_#000]">
+                  <img src={cppLogo} alt="C++" className="max-w-full max-h-full object-contain grayscale group-hover:grayscale-0 transition-all duration-300" />
+                </div>
+                <span className="mt-3 font-mono text-[11px] font-bold uppercase text-stone-700 tracking-wider">C++</span>
+              </div>
+            </div>
+          </div>
+
         </section>
 
       </div>
@@ -570,7 +654,7 @@ const App = () => {
               <input type="hidden" name="access_key" value="c8399c3d-17c5-49c2-9432-d09aab289e5c" />
               <input type="hidden" name="subject" value="Pesan Baru dari Portofolio arrnco.com" />
               <input type="hidden" name="from_name" value="Kontak Portofolio" />
-              
+
               <div>
                 <label htmlFor="name" className="block text-xs font-bold uppercase tracking-wider text-stone-500 mb-2">
                   Nama Anda
@@ -616,19 +700,18 @@ const App = () => {
               <button
                 type="submit"
                 disabled={formStatus === 'submitting'}
-                className={`w-full border-2 border-black p-4 font-bold uppercase transition-all shadow-[4px_4px_0_0_#78716c] hover:shadow-none translate-y-0 active:translate-y-1 ${
-                  formStatus === 'submitting'
-                    ? 'bg-stone-300 text-stone-600 cursor-not-allowed shadow-none translate-y-1'
-                    : formStatus === 'success'
+                className={`w-full border-2 border-black p-4 font-bold uppercase transition-all shadow-[4px_4px_0_0_#78716c] hover:shadow-none translate-y-0 active:translate-y-1 ${formStatus === 'submitting'
+                  ? 'bg-stone-300 text-stone-600 cursor-not-allowed shadow-none translate-y-1'
+                  : formStatus === 'success'
                     ? 'bg-green-600 text-white border-green-700'
                     : 'bg-black text-white hover:bg-stone-100 hover:text-black'
-                }`}
+                  }`}
               >
                 {formStatus === 'submitting'
                   ? 'MENGIRIM...'
                   : formStatus === 'success'
-                  ? 'TERKIRIM ✓'
-                  : 'KIRIM PESAN ↗'}
+                    ? 'TERKIRIM ✓'
+                    : 'KIRIM PESAN ↗'}
               </button>
             </form>
           </div>
