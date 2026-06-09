@@ -506,16 +506,9 @@ const App = () => {
             </p>
 
             <div className="space-y-3 pt-4 font-mono text-sm">
-              <a
-                href="mailto:achmadroychan501@gmail.com"
-                className="group flex items-center gap-3 border-2 border-black bg-white hover:bg-black hover:text-white p-3 font-bold transition-all w-full md:max-w-xs shadow-[4px_4px_0_0_#000] hover:shadow-none translate-y-0 active:translate-y-1"
-              >
-                <img src={emailIcon} alt="" className="w-5 h-5 object-contain group-hover:invert transition-all duration-200" />
-                <span>EMAIL SAYA</span>
-              </a>
 
               <a
-                href="https://github.com"
+                href="https://github.com/Arroychaan"
                 target="_blank"
                 rel="noreferrer"
                 className="group flex items-center gap-3 border-2 border-black bg-white hover:bg-black hover:text-white p-3 font-bold transition-all w-full md:max-w-xs shadow-[4px_4px_0_0_#000] hover:shadow-none translate-y-0 active:translate-y-1"
@@ -524,7 +517,7 @@ const App = () => {
                 <span>GITHUB PROFILE</span>
               </a>
               <a
-                href="https://linkedin.com"
+                href="https://www.linkedin.com/in/achmad-roychan-87459724b/"
                 target="_blank"
                 rel="noreferrer"
                 className="group flex items-center gap-3 border-2 border-black bg-white hover:bg-black hover:text-white p-3 font-bold transition-all w-full md:max-w-xs shadow-[4px_4px_0_0_#000] hover:shadow-none translate-y-0 active:translate-y-1"
@@ -533,7 +526,7 @@ const App = () => {
                 <span>LINKEDIN PROFILE</span>
               </a>
               <a
-                href="https://instagram.com"
+                href="https://www.instagram.com/ar.roychan/"
                 target="_blank"
                 rel="noreferrer"
                 className="group flex items-center gap-3 border-2 border-black bg-white hover:bg-black hover:text-white p-3 font-bold transition-all w-full md:max-w-xs shadow-[4px_4px_0_0_#000] hover:shadow-none translate-y-0 active:translate-y-1"
