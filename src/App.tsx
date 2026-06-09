@@ -12,7 +12,7 @@ import tailwindLogo from './assets/tailwindlogo.png';
 import nodejsLogo from './assets/nodejslogo.png';
 import postgresLogo from './assets/postgresql.png';
 import javaLogo from './assets/JAVALOGO.png';
-import cppLogo from './assets/.png';
+import cppLogo from './assets/c++.png';
 
 
 
@@ -491,13 +491,13 @@ const App = () => {
 
             {/* About Photo Panel (30%) */}
             <div className="flex-[2] flex items-center justify-center w-full">
-              <div 
+              <div
                 className="w-full max-w-[280px] aspect-square border-4 border-black bg-stone-100 relative select-none"
                 style={{ boxShadow: '8px 8px 0 0 #000' }}
               >
-                <img 
-                  src={aboutPhoto} 
-                  alt="Tentang Achmad" 
+                <img
+                  src={aboutPhoto}
+                  alt="Tentang Achmad"
                   className="absolute inset-0 w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-300 pointer-events-none"
                 />
                 <div className="absolute top-2 left-2 bg-black text-white font-mono text-[10px] px-2 py-0.5 border border-white">
@@ -514,83 +514,83 @@ const App = () => {
               [ MY_TOOLKIT_RESOURCES: ]
             </h3>
             <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-y-12 gap-x-6 text-center select-none">
-              
+
               {/* HTML */}
               <div className="flex flex-col items-center group">
-                <div className="w-16 h-16 flex items-center justify-center border-2 border-transparent group-hover:border-black transition-all p-2 bg-white shadow-none group-hover:shadow-[4px_4px_0_0_#000]">
-                  <img src={htmlLogo} alt="HTML" className="max-w-full max-h-full object-contain grayscale group-hover:grayscale-0 transition-all duration-300" />
+                <div className="w-16 h-16 flex items-center justify-center border-2 border-transparent group-hover:border-black transition-all p-2 bg-transparent shadow-none group-hover:shadow-[4px_4px_0_0_#000]">
+                  <img src={htmlLogo} alt="HTML" className="max-w-full max-h-full object-contain grayscale group-hover:grayscale-0 transition-all duration-300 mix-blend-multiply" />
                 </div>
                 <span className="mt-3 font-mono text-[11px] font-bold uppercase text-stone-700 tracking-wider">HTML</span>
               </div>
 
               {/* CSS */}
               <div className="flex flex-col items-center group">
-                <div className="w-16 h-16 flex items-center justify-center border-2 border-transparent group-hover:border-black transition-all p-2 bg-white shadow-none group-hover:shadow-[4px_4px_0_0_#000]">
-                  <img src={cssLogo} alt="CSS" className="max-w-full max-h-full object-contain grayscale group-hover:grayscale-0 transition-all duration-300" />
+                <div className="w-16 h-16 flex items-center justify-center border-2 border-transparent group-hover:border-black transition-all p-2 bg-transparent shadow-none group-hover:shadow-[4px_4px_0_0_#000]">
+                  <img src={cssLogo} alt="CSS" className="max-w-full max-h-full object-contain grayscale group-hover:grayscale-0 transition-all duration-300 mix-blend-multiply" />
                 </div>
                 <span className="mt-3 font-mono text-[11px] font-bold uppercase text-stone-700 tracking-wider">CSS</span>
               </div>
 
               {/* React.js */}
               <div className="flex flex-col items-center group">
-                <div className="w-16 h-16 flex items-center justify-center border-2 border-transparent group-hover:border-black transition-all p-2 bg-white shadow-none group-hover:shadow-[4px_4px_0_0_#000]">
-                  <img src={reactLogo} alt="React" className="max-w-full max-h-full object-contain grayscale group-hover:grayscale-0 transition-all duration-300" />
+                <div className="w-16 h-16 flex items-center justify-center border-2 border-transparent group-hover:border-black transition-all p-2 bg-transparent shadow-none group-hover:shadow-[4px_4px_0_0_#000]">
+                  <img src={reactLogo} alt="React" className="max-w-full max-h-full object-contain grayscale group-hover:grayscale-0 transition-all duration-300 mix-blend-multiply" />
                 </div>
                 <span className="mt-3 font-mono text-[11px] font-bold uppercase text-stone-700 tracking-wider">React.js</span>
               </div>
 
               {/* Next.js */}
               <div className="flex flex-col items-center group">
-                <div className="w-16 h-16 flex items-center justify-center border-2 border-transparent group-hover:border-black transition-all p-2 bg-white shadow-none group-hover:shadow-[4px_4px_0_0_#000]">
-                  <img src={nextjsLogo} alt="Next.js" className="max-w-full max-h-full object-contain grayscale group-hover:grayscale-0 transition-all duration-300" />
+                <div className="w-16 h-16 flex items-center justify-center border-2 border-transparent group-hover:border-black transition-all p-2 bg-transparent shadow-none group-hover:shadow-[4px_4px_0_0_#000]">
+                  <img src={nextjsLogo} alt="Next.js" className="max-w-full max-h-full object-contain grayscale group-hover:grayscale-0 transition-all duration-300 mix-blend-multiply" />
                 </div>
                 <span className="mt-3 font-mono text-[11px] font-bold uppercase text-stone-700 tracking-wider">Next.js</span>
               </div>
 
               {/* TypeScript */}
               <div className="flex flex-col items-center group">
-                <div className="w-16 h-16 flex items-center justify-center border-2 border-transparent group-hover:border-black transition-all p-2 bg-white shadow-none group-hover:shadow-[4px_4px_0_0_#000]">
-                  <img src={tsLogo} alt="TypeScript" className="max-w-full max-h-full object-contain grayscale group-hover:grayscale-0 transition-all duration-300" />
+                <div className="w-16 h-16 flex items-center justify-center border-2 border-transparent group-hover:border-black transition-all p-2 bg-transparent shadow-none group-hover:shadow-[4px_4px_0_0_#000]">
+                  <img src={tsLogo} alt="TypeScript" className="max-w-full max-h-full object-contain grayscale group-hover:grayscale-0 transition-all duration-300 mix-blend-multiply" />
                 </div>
                 <span className="mt-3 font-mono text-[11px] font-bold uppercase text-stone-700 tracking-wider">TypeScript</span>
               </div>
 
               {/* Tailwind CSS */}
               <div className="flex flex-col items-center group">
-                <div className="w-16 h-16 flex items-center justify-center border-2 border-transparent group-hover:border-black transition-all p-2 bg-white shadow-none group-hover:shadow-[4px_4px_0_0_#000]">
-                  <img src={tailwindLogo} alt="Tailwind CSS" className="max-w-full max-h-full object-contain grayscale group-hover:grayscale-0 transition-all duration-300" />
+                <div className="w-16 h-16 flex items-center justify-center border-2 border-transparent group-hover:border-black transition-all p-2 bg-transparent shadow-none group-hover:shadow-[4px_4px_0_0_#000]">
+                  <img src={tailwindLogo} alt="Tailwind CSS" className="max-w-full max-h-full object-contain grayscale group-hover:grayscale-0 transition-all duration-300 mix-blend-multiply" />
                 </div>
                 <span className="mt-3 font-mono text-[11px] font-bold uppercase text-stone-700 tracking-wider">Tailwind CSS</span>
               </div>
 
               {/* Node.js */}
               <div className="flex flex-col items-center group">
-                <div className="w-16 h-16 flex items-center justify-center border-2 border-transparent group-hover:border-black transition-all p-2 bg-white shadow-none group-hover:shadow-[4px_4px_0_0_#000]">
-                  <img src={nodejsLogo} alt="Node.js" className="max-w-full max-h-full object-contain grayscale group-hover:grayscale-0 transition-all duration-300" />
+                <div className="w-16 h-16 flex items-center justify-center border-2 border-transparent group-hover:border-black transition-all p-2 bg-transparent shadow-none group-hover:shadow-[4px_4px_0_0_#000]">
+                  <img src={nodejsLogo} alt="Node.js" className="max-w-full max-h-full object-contain grayscale group-hover:grayscale-0 transition-all duration-300 mix-blend-multiply" />
                 </div>
                 <span className="mt-3 font-mono text-[11px] font-bold uppercase text-stone-700 tracking-wider">Node.js</span>
               </div>
 
               {/* PostgreSQL */}
               <div className="flex flex-col items-center group">
-                <div className="w-16 h-16 flex items-center justify-center border-2 border-transparent group-hover:border-black transition-all p-2 bg-white shadow-none group-hover:shadow-[4px_4px_0_0_#000]">
-                  <img src={postgresLogo} alt="PostgreSQL" className="max-w-full max-h-full object-contain grayscale group-hover:grayscale-0 transition-all duration-300" />
+                <div className="w-16 h-16 flex items-center justify-center border-2 border-transparent group-hover:border-black transition-all p-2 bg-transparent shadow-none group-hover:shadow-[4px_4px_0_0_#000]">
+                  <img src={postgresLogo} alt="PostgreSQL" className="max-w-full max-h-full object-contain grayscale group-hover:grayscale-0 transition-all duration-300 mix-blend-multiply" />
                 </div>
                 <span className="mt-3 font-mono text-[11px] font-bold uppercase text-stone-700 tracking-wider">PostgreSQL</span>
               </div>
 
               {/* Java */}
               <div className="flex flex-col items-center group">
-                <div className="w-16 h-16 flex items-center justify-center border-2 border-transparent group-hover:border-black transition-all p-2 bg-white shadow-none group-hover:shadow-[4px_4px_0_0_#000]">
-                  <img src={javaLogo} alt="Java" className="max-w-full max-h-full object-contain grayscale group-hover:grayscale-0 transition-all duration-300" />
+                <div className="w-16 h-16 flex items-center justify-center border-2 border-transparent group-hover:border-black transition-all p-2 bg-transparent shadow-none group-hover:shadow-[4px_4px_0_0_#000]">
+                  <img src={javaLogo} alt="Java" className="max-w-full max-h-full object-contain grayscale group-hover:grayscale-0 transition-all duration-300 mix-blend-multiply" />
                 </div>
                 <span className="mt-3 font-mono text-[11px] font-bold uppercase text-stone-700 tracking-wider">Java</span>
               </div>
 
               {/* C++ */}
               <div className="flex flex-col items-center group">
-                <div className="w-16 h-16 flex items-center justify-center border-2 border-transparent group-hover:border-black transition-all p-2 bg-white shadow-none group-hover:shadow-[4px_4px_0_0_#000]">
-                  <img src={cppLogo} alt="C++" className="max-w-full max-h-full object-contain grayscale group-hover:grayscale-0 transition-all duration-300" />
+                <div className="w-16 h-16 flex items-center justify-center border-2 border-transparent group-hover:border-black transition-all p-2 bg-transparent shadow-none group-hover:shadow-[4px_4px_0_0_#000]">
+                  <img src={cppLogo} alt="C++" className="max-w-full max-h-full object-contain grayscale group-hover:grayscale-0 transition-all duration-300 mix-blend-multiply" />
                 </div>
                 <span className="mt-3 font-mono text-[11px] font-bold uppercase text-stone-700 tracking-wider">C++</span>
               </div>
