@@ -5,6 +5,7 @@ import instagramIcon from './assets/instagram.png';
 import profilVideo from './assets/pengganti-gambar.mp4';
 import headerLogoVideo from './assets/logo-Roychan-501.mp4';
 import aboutVideo from './assets/pengganti-gambar-dibawah.mp4';
+import logoMobileSidebar from './assets/logo-mobile-sidebar.png';
 
 import htmlLogo from './assets/HTML_transparent.png';
 import cssLogo from './assets/CSS_transparent.png';
@@ -113,13 +114,10 @@ const App = () => {
           <div className="fixed inset-0 z-50 bg-black text-white flex flex-col justify-between p-8 animate-fade-in">
             <div className="flex justify-between items-center">
               <div className="flex items-center">
-                <video
-                  src={headerLogoVideo}
-                  autoPlay
-                  loop
-                  muted
-                  playsInline
-                  className="h-12 object-contain pointer-events-none"
+                <img
+                  src={logoMobileSidebar}
+                  alt="Roychan501"
+                  className="h-12 object-contain"
                 />
               </div>
               <button
