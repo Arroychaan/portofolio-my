@@ -231,6 +231,11 @@ const App = () => {
             <div
               className="group relative w-full md:w-[60%] h-[350px] md:h-[400px] border-4 border-black bg-stone-900 overflow-hidden cursor-pointer shadow-[8px_8px_0_0_#000]"
             >
+              {/* Mobile Live Badge */}
+              <div className="absolute top-4 right-4 bg-white text-black px-3 py-1 font-mono text-[10px] font-black uppercase border-2 border-black md:hidden shadow-[2px_2px_0_0_#000] z-[5]">
+                🔴 TAP FOR LIVE
+              </div>
+
               {/* Image Layer */}
               <div className="absolute inset-0 flex items-center justify-center select-none overflow-hidden transition-transform duration-500 group-hover:scale-105 bg-stone-200">
                 <img src={nutrifyImg} alt="Nutrify" className="w-full h-full object-cover grayscale" />
@@ -261,14 +266,6 @@ const App = () => {
                   >
                     LIVE DEMO ↗
                   </a>
-                  <a
-                    href="https://github.com"
-                    target="_blank"
-                    rel="noreferrer"
-                    className="border-2 border-white bg-transparent text-white hover:bg-stone-900 px-5 py-2 font-mono text-sm font-bold uppercase transition-colors"
-                  >
-                    CODE ↗
-                  </a>
                 </div>
               </div>
             </div>
@@ -277,6 +274,11 @@ const App = () => {
             <div
               className="group relative w-full md:w-[37%] h-[350px] md:h-[400px] border-4 border-black bg-stone-900 overflow-hidden cursor-pointer shadow-[8px_8px_0_0_#000]"
             >
+              {/* Mobile Live Badge */}
+              <div className="absolute top-4 right-4 bg-white text-black px-3 py-1 font-mono text-[10px] font-black uppercase border-2 border-black md:hidden shadow-[2px_2px_0_0_#000] z-[5]">
+                🔴 TAP FOR LIVE
+              </div>
+
               {/* Image Layer */}
               <div className="absolute inset-0 flex items-center justify-center select-none overflow-hidden transition-transform duration-500 group-hover:scale-105 bg-stone-200">
                 <img src={kubuImg} alt="Kubu App" className="w-full h-full object-cover grayscale" />
@@ -306,14 +308,6 @@ const App = () => {
                   >
                     LIVE DEMO ↗
                   </a>
-                  <a
-                    href="https://github.com"
-                    target="_blank"
-                    rel="noreferrer"
-                    className="border-2 border-white bg-transparent text-white hover:bg-stone-900 px-4 py-2 font-mono text-xs font-bold uppercase transition-colors"
-                  >
-                    CODE ↗
-                  </a>
                 </div>
               </div>
             </div>
@@ -327,6 +321,11 @@ const App = () => {
             <div
               className="group relative w-full md:w-[37%] h-[350px] md:h-[400px] border-4 border-black bg-stone-900 overflow-hidden cursor-pointer shadow-[8px_8px_0_0_#000]"
             >
+              {/* Mobile Live Badge */}
+              <div className="absolute top-4 right-4 bg-white text-black px-3 py-1 font-mono text-[10px] font-black uppercase border-2 border-black md:hidden shadow-[2px_2px_0_0_#000] z-[5]">
+                🔴 TAP FOR LIVE
+              </div>
+
               {/* Image Layer */}
               <div className="absolute inset-0 flex items-center justify-center select-none overflow-hidden transition-transform duration-500 group-hover:scale-105 bg-stone-200">
                 <img src={reucImg} alt="Reuc" className="w-full h-full object-cover grayscale" />
@@ -355,14 +354,6 @@ const App = () => {
                   >
                     LIVE DEMO ↗
                   </a>
-                  <a
-                    href="https://github.com"
-                    target="_blank"
-                    rel="noreferrer"
-                    className="border-2 border-white bg-transparent text-white hover:bg-stone-900 px-4 py-2 font-mono text-xs font-bold uppercase transition-colors"
-                  >
-                    CODE ↗
-                  </a>
                 </div>
               </div>
             </div>
@@ -371,6 +362,11 @@ const App = () => {
             <div
               className="group relative w-full md:w-[60%] h-[350px] md:h-[400px] border-4 border-black bg-stone-900 overflow-hidden cursor-pointer shadow-[8px_8px_0_0_#000]"
             >
+              {/* Mobile Live Badge */}
+              <div className="absolute top-4 right-4 bg-white text-black px-3 py-1 font-mono text-[10px] font-black uppercase border-2 border-black md:hidden shadow-[2px_2px_0_0_#000] z-[5]">
+                🔴 TAP FOR LIVE
+              </div>
+
               {/* Image Layer */}
               <div className="absolute inset-0 flex items-center justify-center select-none overflow-hidden transition-transform duration-500 group-hover:scale-105 bg-stone-200">
                 <img src={anekaJajananImg} alt="Aneka Jajanan" className="w-full h-full object-cover grayscale" />
@@ -398,14 +394,6 @@ const App = () => {
                     className="border-2 border-white bg-white text-black hover:bg-stone-200 px-5 py-2 font-mono text-sm font-bold uppercase transition-colors"
                   >
                     LIVE DEMO ↗
-                  </a>
-                  <a
-                    href="https://github.com"
-                    target="_blank"
-                    rel="noreferrer"
-                    className="border-2 border-white bg-transparent text-white hover:bg-stone-900 px-5 py-2 font-mono text-sm font-bold uppercase transition-colors"
-                  >
-                    CODE ↗
                   </a>
                 </div>
               </div>
