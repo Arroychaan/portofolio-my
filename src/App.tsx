@@ -117,7 +117,7 @@ const App = () => {
                 <img
                   src={logoMobileSidebar}
                   alt="Roychan501"
-                  className="h-12 object-contain"
+                  className="h-20 object-contain"
                 />
               </div>
               <button
