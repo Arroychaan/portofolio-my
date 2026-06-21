@@ -15,6 +15,11 @@ import postgresqlLogo from './assets/postgresql_transparent.png';
 import javaLogo from './assets/JAVALOGO_transparent.png';
 import cppLogo from './assets/c++.png';
 
+import nutrifyImg from './assets/asset-nutrify.png';
+import kubuImg from './assets/kubu-asset.png';
+import reucImg from './assets/reuc-asset.png';
+import anekaJajananImg from './assets/asset-anekajajanan.png';
+
 const App = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
@@ -215,21 +220,9 @@ const App = () => {
             <div
               className="group relative w-full md:w-[60%] h-[350px] md:h-[400px] border-4 border-black bg-stone-900 overflow-hidden cursor-pointer shadow-[8px_8px_0_0_#000]"
             >
-              {/* Technical Drawing Blueprint Layer */}
-              <div className="absolute inset-0 flex items-center justify-center p-8 select-none overflow-hidden transition-transform duration-500 group-hover:scale-105">
-                <svg className="w-full h-full text-stone-700 opacity-40 font-mono" viewBox="0 0 400 300">
-                  <defs>
-                    <pattern id="grid" width="20" height="20" patternUnits="userSpaceOnUse">
-                      <path d="M 20 0 L 0 0 0 20" fill="none" stroke="currentColor" strokeWidth="0.5" />
-                    </pattern>
-                  </defs>
-                  <rect width="100%" height="100%" fill="url(#grid)" />
-                  <circle cx="200" cy="150" r="80" fill="none" stroke="currentColor" strokeWidth="2" strokeDasharray="5,5" />
-                  <path d="M 50 150 L 350 150 M 200 50 L 200 250" stroke="currentColor" strokeWidth="1" />
-                  <text x="60" y="80" fill="currentColor" className="text-[12px] font-bold">SYS_DIAG: NUTRIFY_TRACKER</text>
-                  <path d="M 80 220 Q 150 120 200 180 T 320 100" fill="none" stroke="#fff" strokeWidth="3" />
-                  <text x="210" y="240" fill="currentColor" className="text-[10px]">MACRO CALIBRATION: ACTIVE</text>
-                </svg>
+              {/* Image Layer */}
+              <div className="absolute inset-0 flex items-center justify-center select-none overflow-hidden transition-transform duration-500 group-hover:scale-105 bg-stone-200">
+                <img src={nutrifyImg} alt="Nutrify" className="w-full h-full object-cover grayscale" />
               </div>
 
               {/* Instant Hover Overlay */}
@@ -273,31 +266,9 @@ const App = () => {
             <div
               className="group relative w-full md:w-[37%] h-[350px] md:h-[400px] border-4 border-black bg-stone-900 overflow-hidden cursor-pointer shadow-[8px_8px_0_0_#000]"
             >
-              {/* Technical Drawing Blueprint Layer */}
-              <div className="absolute inset-0 flex items-center justify-center p-6 select-none overflow-hidden transition-transform duration-500 group-hover:scale-105">
-                <svg className="w-full h-full text-stone-700 opacity-40 font-mono" viewBox="0 0 300 300">
-                  <rect width="100%" height="100%" fill="none" stroke="currentColor" strokeWidth="1" />
-                  {/* Kanban Outline Columns */}
-                  <rect x="20" y="40" width="70" height="220" fill="none" stroke="currentColor" strokeWidth="1.5" />
-                  <rect x="110" y="40" width="70" height="220" fill="none" stroke="currentColor" strokeWidth="1.5" />
-                  <rect x="200" y="40" width="70" height="220" fill="none" stroke="currentColor" strokeWidth="1.5" />
-                  <text x="25" y="30" fill="currentColor" className="text-[10px] font-bold">TODO</text>
-                  <text x="115" y="30" fill="currentColor" className="text-[10px] font-bold">WIP</text>
-                  <text x="205" y="30" fill="currentColor" className="text-[10px] font-bold">DONE</text>
-
-                  {/* Mini Cards inside columns */}
-                  <rect x="25" y="50" width="60" height="40" fill="none" stroke="currentColor" strokeWidth="1" />
-                  <line x1="30" y1="65" x2="80" y2="65" stroke="currentColor" strokeWidth="1" />
-                  <line x1="30" y1="75" x2="65" y2="75" stroke="currentColor" strokeWidth="1" />
-
-                  <rect x="115" y="50" width="60" height="55" fill="none" stroke="currentColor" strokeWidth="1" />
-                  <line x1="120" y1="65" x2="170" y2="65" stroke="currentColor" strokeWidth="1" />
-                  <line x1="120" y1="75" x2="160" y2="75" stroke="currentColor" strokeWidth="1" />
-                  <line x1="120" y1="85" x2="145" y2="85" stroke="currentColor" strokeWidth="1" />
-
-                  <rect x="205" y="50" width="60" height="30" fill="none" stroke="currentColor" strokeWidth="1" />
-                  <line x1="210" y1="65" x2="255" y2="65" stroke="#fff" strokeWidth="2" />
-                </svg>
+              {/* Image Layer */}
+              <div className="absolute inset-0 flex items-center justify-center select-none overflow-hidden transition-transform duration-500 group-hover:scale-105 bg-stone-200">
+                <img src={kubuImg} alt="Kubu App" className="w-full h-full object-cover grayscale" />
               </div>
 
               {/* Instant Hover Overlay */}
@@ -341,114 +312,76 @@ const App = () => {
           {/* ROW 2: Project 3 (37%) and Project 4 (60%) */}
           <div className="flex flex-col md:flex-row justify-between gap-8 md:gap-12">
 
-            {/* Project 3: Aether Compiler (37% Width) */}
+            {/* Project 3: Reuc (37% Width) */}
             <div
               className="group relative w-full md:w-[37%] h-[350px] md:h-[400px] border-4 border-black bg-stone-900 overflow-hidden cursor-pointer shadow-[8px_8px_0_0_#000]"
             >
-              {/* Technical Drawing Blueprint Layer */}
-              <div className="absolute inset-0 flex items-center justify-center p-6 select-none overflow-hidden transition-transform duration-500 group-hover:scale-105">
-                <svg className="w-full h-full text-stone-700 opacity-40 font-mono" viewBox="0 0 300 300">
-                  <rect x="10" y="10" width="280" height="280" fill="none" stroke="currentColor" strokeWidth="1" />
-                  {/* IDE-like Lines */}
-                  <text x="25" y="40" fill="currentColor" className="text-[9px] font-bold">1: import compiler from 'aether-core';</text>
-                  <text x="25" y="55" fill="currentColor" className="text-[9px] font-bold">2: const source = readFileSync('./src.ae');</text>
-                  <text x="25" y="70" fill="currentColor" className="text-[9px] font-bold">3: </text>
-                  <text x="25" y="85" fill="currentColor" className="text-[9px] font-bold">4: export function compile(ast) &#123;</text>
-                  <text x="25" y="100" fill="currentColor" className="text-[9px] font-bold">5:   const tokens = compiler.tokenize(ast);</text>
-                  <text x="25" y="115" fill="currentColor" className="text-[9px] font-bold">6:   const binary = compiler.codegen(tokens);</text>
-                  <text x="25" y="130" fill="currentColor" className="text-[9px] font-bold">7:   return binary;</text>
-                  <text x="25" y="145" fill="currentColor" className="text-[9px] font-bold">8: &#125;</text>
-
-                  {/* Terminal block at bottom */}
-                  <rect x="20" y="180" width="260" height="90" fill="currentColor" opacity="0.1" />
-                  <rect x="20" y="180" width="260" height="90" fill="none" stroke="currentColor" strokeWidth="1" />
-                  <text x="30" y="200" fill="#fff" className="text-[8px] font-bold">AETHER COMPILER CLI v1.2.0</text>
-                  <text x="30" y="220" fill="currentColor" className="text-[8px]">{'>>'} Tokenizing source: Done. (45ms)</text>
-                  <text x="30" y="235" fill="currentColor" className="text-[8px]">{'>>'} Optimizing AST layout: 104 nodes.</text>
-                  <text x="30" y="250" fill="currentColor" className="text-[8px]">{'>>'} Output: ./bin/main.wasm (14.2kb)</text>
-                </svg>
+              {/* Image Layer */}
+              <div className="absolute inset-0 flex items-center justify-center select-none overflow-hidden transition-transform duration-500 group-hover:scale-105 bg-stone-200">
+                <img src={reucImg} alt="Reuc" className="w-full h-full object-cover grayscale" />
               </div>
 
               {/* Instant Hover Overlay */}
               <div className="absolute inset-0 bg-black text-white flex flex-col items-center justify-center p-6 opacity-0 group-hover:opacity-100 transition-opacity duration-200 z-10">
                 <h3 className="text-3xl font-black uppercase tracking-tight mb-1 text-center">
-                  AETHER TOOL
+                  REUC
                 </h3>
                 <p className="font-mono text-xs uppercase text-stone-400 mb-6 border-b border-stone-800 pb-2 w-[85%] text-center">
-                  Kompiler WebAssembly Kustom & CLI
+                  Aplikasi Reuc
                 </p>
 
                 <ul className="flex flex-wrap justify-center gap-1.5 mb-8 font-mono text-xs">
-                  <li className="border border-stone-700 bg-stone-900 text-stone-300 px-2.5 py-1">RUST</li>
-                  <li className="border border-stone-700 bg-stone-900 text-stone-300 px-2.5 py-1">WASM</li>
-                  <li className="border border-stone-700 bg-stone-900 text-stone-300 px-2.5 py-1">NODEJS</li>
+                  <li className="border border-stone-700 bg-stone-900 text-stone-300 px-2.5 py-1">REACT.JS</li>
+                  <li className="border border-stone-700 bg-stone-900 text-stone-300 px-2.5 py-1">TAILWIND CSS</li>
                 </ul>
 
                 <div className="flex gap-3">
                   <a
-                    href="https://github.com"
+                    href="https://reuc.vercel.app/"
                     target="_blank"
                     rel="noreferrer"
                     className="border-2 border-white bg-white text-black hover:bg-stone-200 px-4 py-2 font-mono text-xs font-bold uppercase transition-colors"
                   >
-                    LIHAT CODE ↗
+                    LIVE DEMO ↗
+                  </a>
+                  <a
+                    href="https://github.com"
+                    target="_blank"
+                    rel="noreferrer"
+                    className="border-2 border-white bg-transparent text-white hover:bg-stone-900 px-4 py-2 font-mono text-xs font-bold uppercase transition-colors"
+                  >
+                    CODE ↗
                   </a>
                 </div>
               </div>
             </div>
 
-            {/* Project 4: Omni Dashboard (60% Width) */}
+            {/* Project 4: Aneka Jajanan (60% Width) */}
             <div
               className="group relative w-full md:w-[60%] h-[350px] md:h-[400px] border-4 border-black bg-stone-900 overflow-hidden cursor-pointer shadow-[8px_8px_0_0_#000]"
             >
-              {/* Technical Drawing Blueprint Layer */}
-              <div className="absolute inset-0 flex items-center justify-center p-8 select-none overflow-hidden transition-transform duration-500 group-hover:scale-105">
-                <svg className="w-full h-full text-stone-700 opacity-40 font-mono" viewBox="0 0 400 300">
-                  <defs>
-                    <pattern id="grid-large" width="40" height="40" patternUnits="userSpaceOnUse">
-                      <path d="M 40 0 L 0 0 0 40" fill="none" stroke="currentColor" strokeWidth="0.5" />
-                    </pattern>
-                  </defs>
-                  <rect width="100%" height="100%" fill="url(#grid-large)" />
-                  {/* Grid Layout Cards */}
-                  <rect x="20" y="30" width="160" height="110" fill="none" stroke="currentColor" strokeWidth="1.5" />
-                  <rect x="200" y="30" width="180" height="110" fill="none" stroke="currentColor" strokeWidth="1.5" />
-                  <rect x="20" y="160" width="360" height="110" fill="none" stroke="currentColor" strokeWidth="1.5" />
-
-                  {/* Visual charts inside */}
-                  <circle cx="100" cy="85" r="30" fill="none" stroke="currentColor" strokeWidth="2" />
-                  <path d="M 100 55 A 30 30 0 0 1 130 85" stroke="#fff" strokeWidth="3" fill="none" />
-
-                  <line x1="220" y1="110" x2="220" y2="60" stroke="currentColor" strokeWidth="4" />
-                  <line x1="250" y1="110" x2="250" y2="50" stroke="currentColor" strokeWidth="4" />
-                  <line x1="280" y1="110" x2="280" y2="80" stroke="currentColor" strokeWidth="4" />
-                  <line x1="310" y1="110" x2="310" y2="40" stroke="currentColor" strokeWidth="4" />
-
-                  {/* Waves in bottom grid */}
-                  <path d="M 30 240 Q 90 180 150 220 T 270 190 T 370 230" fill="none" stroke="currentColor" strokeWidth="2" />
-                  <text x="35" y="175" fill="currentColor" className="text-[10px] font-bold">SERVER METRICS ANALYSIS</text>
-                </svg>
+              {/* Image Layer */}
+              <div className="absolute inset-0 flex items-center justify-center select-none overflow-hidden transition-transform duration-500 group-hover:scale-105 bg-stone-200">
+                <img src={anekaJajananImg} alt="Aneka Jajanan" className="w-full h-full object-cover grayscale" />
               </div>
 
               {/* Instant Hover Overlay */}
               <div className="absolute inset-0 bg-black text-white flex flex-col items-center justify-center p-6 opacity-0 group-hover:opacity-100 transition-opacity duration-200 z-10">
                 <h3 className="text-3xl md:text-4xl font-black uppercase tracking-tight mb-1">
-                  OMNI DASH
+                  ANEKA JAJANAN
                 </h3>
                 <p className="font-mono text-xs md:text-sm uppercase text-stone-400 mb-6 border-b border-stone-800 pb-2 w-[80%] text-center">
-                  Sistem Analytics & Visualisasi Data Real-Time
+                  Katalog Aneka Jajanan
                 </p>
 
                 <ul className="flex flex-wrap justify-center gap-2 mb-8 font-mono text-xs">
                   <li className="border border-stone-700 bg-stone-900 text-stone-300 px-3 py-1">REACT.JS</li>
-                  <li className="border border-stone-700 bg-stone-900 text-stone-300 px-3 py-1">D3.JS</li>
-                  <li className="border border-stone-700 bg-stone-900 text-stone-300 px-3 py-1">WEBSOCKETS</li>
-                  <li className="border border-stone-700 bg-stone-900 text-stone-300 px-3 py-1">DOCKER</li>
+                  <li className="border border-stone-700 bg-stone-900 text-stone-300 px-3 py-1">TAILWIND CSS</li>
                 </ul>
 
                 <div className="flex gap-4">
                   <a
-                    href="https://github.com"
+                    href="https://anekajajanan.vercel.app/"
                     target="_blank"
                     rel="noreferrer"
                     className="border-2 border-white bg-white text-black hover:bg-stone-200 px-5 py-2 font-mono text-sm font-bold uppercase transition-colors"
