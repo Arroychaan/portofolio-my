@@ -231,10 +231,10 @@ const App = () => {
             <div
               className="group relative w-full md:w-[60%] h-[350px] md:h-[400px] border-4 border-black bg-stone-900 overflow-hidden cursor-pointer shadow-[8px_8px_0_0_#000]"
             >
-              {/* Mobile Live Badge */}
-              <div className="absolute top-4 right-4 bg-white text-black px-3 py-1 font-mono text-[10px] font-black uppercase border-2 border-black md:hidden shadow-[2px_2px_0_0_#000] z-[5]">
+              {/* Mobile LiveBadge */}
+              <a href="https://nutrify-app-sigma.vercel.app/" target="_blank" rel="noreferrer" className="absolute top-4 right-4 bg-white text-black px-3 py-1 font-mono text-[10px] font-black uppercase border-2 border-black md:hidden shadow-[2px_2px_0_0_#000] z-[20]">
                 🔴 TAP FOR LIVE
-              </div>
+              </a>
 
               {/* Image Layer */}
               <div className="absolute inset-0 flex items-center justify-center select-none overflow-hidden transition-transform duration-500 group-hover:scale-105 bg-stone-200">
@@ -264,7 +264,7 @@ const App = () => {
                     rel="noreferrer"
                     className="border-2 border-white bg-white text-black hover:bg-stone-200 px-5 py-2 font-mono text-sm font-bold uppercase transition-colors"
                   >
-                    LIVE DEMO ↗
+                    LiveDEMO ↗
                   </a>
                 </div>
               </div>
@@ -274,10 +274,10 @@ const App = () => {
             <div
               className="group relative w-full md:w-[37%] h-[350px] md:h-[400px] border-4 border-black bg-stone-900 overflow-hidden cursor-pointer shadow-[8px_8px_0_0_#000]"
             >
-              {/* Mobile Live Badge */}
-              <div className="absolute top-4 right-4 bg-white text-black px-3 py-1 font-mono text-[10px] font-black uppercase border-2 border-black md:hidden shadow-[2px_2px_0_0_#000] z-[5]">
+              {/* Mobile LiveBadge */}
+              <a href="https://kubu-app.vercel.app/" target="_blank" rel="noreferrer" className="absolute top-4 right-4 bg-white text-black px-3 py-1 font-mono text-[10px] font-black uppercase border-2 border-black md:hidden shadow-[2px_2px_0_0_#000] z-[20]">
                 🔴 TAP FOR LIVE
-              </div>
+              </a>
 
               {/* Image Layer */}
               <div className="absolute inset-0 flex items-center justify-center select-none overflow-hidden transition-transform duration-500 group-hover:scale-105 bg-stone-200">
@@ -306,7 +306,7 @@ const App = () => {
                     rel="noreferrer"
                     className="border-2 border-white bg-white text-black hover:bg-stone-200 px-4 py-2 font-mono text-xs font-bold uppercase transition-colors"
                   >
-                    LIVE DEMO ↗
+                    LiveDEMO ↗
                   </a>
                 </div>
               </div>
@@ -321,10 +321,10 @@ const App = () => {
             <div
               className="group relative w-full md:w-[37%] h-[350px] md:h-[400px] border-4 border-black bg-stone-900 overflow-hidden cursor-pointer shadow-[8px_8px_0_0_#000]"
             >
-              {/* Mobile Live Badge */}
-              <div className="absolute top-4 right-4 bg-white text-black px-3 py-1 font-mono text-[10px] font-black uppercase border-2 border-black md:hidden shadow-[2px_2px_0_0_#000] z-[5]">
+              {/* Mobile LiveBadge */}
+              <a href="https://reuc.vercel.app/" target="_blank" rel="noreferrer" className="absolute top-4 right-4 bg-white text-black px-3 py-1 font-mono text-[10px] font-black uppercase border-2 border-black md:hidden shadow-[2px_2px_0_0_#000] z-[20]">
                 🔴 TAP FOR LIVE
-              </div>
+              </a>
 
               {/* Image Layer */}
               <div className="absolute inset-0 flex items-center justify-center select-none overflow-hidden transition-transform duration-500 group-hover:scale-105 bg-stone-200">
@@ -352,7 +352,7 @@ const App = () => {
                     rel="noreferrer"
                     className="border-2 border-white bg-white text-black hover:bg-stone-200 px-4 py-2 font-mono text-xs font-bold uppercase transition-colors"
                   >
-                    LIVE DEMO ↗
+                    LiveDEMO ↗
                   </a>
                 </div>
               </div>
@@ -362,10 +362,10 @@ const App = () => {
             <div
               className="group relative w-full md:w-[60%] h-[350px] md:h-[400px] border-4 border-black bg-stone-900 overflow-hidden cursor-pointer shadow-[8px_8px_0_0_#000]"
             >
-              {/* Mobile Live Badge */}
-              <div className="absolute top-4 right-4 bg-white text-black px-3 py-1 font-mono text-[10px] font-black uppercase border-2 border-black md:hidden shadow-[2px_2px_0_0_#000] z-[5]">
+              {/* Mobile LiveBadge */}
+              <a href="https://anekajajanan.vercel.app/" target="_blank" rel="noreferrer" className="absolute top-4 right-4 bg-white text-black px-3 py-1 font-mono text-[10px] font-black uppercase border-2 border-black md:hidden shadow-[2px_2px_0_0_#000] z-[20]">
                 🔴 TAP FOR LIVE
-              </div>
+              </a>
 
               {/* Image Layer */}
               <div className="absolute inset-0 flex items-center justify-center select-none overflow-hidden transition-transform duration-500 group-hover:scale-105 bg-stone-200">
@@ -393,7 +393,7 @@ const App = () => {
                     rel="noreferrer"
                     className="border-2 border-white bg-white text-black hover:bg-stone-200 px-5 py-2 font-mono text-sm font-bold uppercase transition-colors"
                   >
-                    LIVE DEMO ↗
+                    LiveDEMO ↗
                   </a>
                 </div>
               </div>
