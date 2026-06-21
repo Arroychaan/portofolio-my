@@ -443,7 +443,7 @@ const App = () => {
                   loop
                   muted
                   playsInline
-                  className="absolute inset-0 w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-300 pointer-events-none mix-blend-multiply"
+                  className="absolute inset-0 w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-300 pointer-events-none mix-blend-multiply brightness-110"
                 />
               </div>
             </div>
