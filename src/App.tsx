@@ -2,7 +2,9 @@ import React, { useState } from 'react';
 import githubIcon from './assets/github-logo-png_seeklogo-304612.png';
 import linkedinIcon from './assets/linkedin.png';
 import instagramIcon from './assets/instagram.png';
-import aboutPhoto from './assets/fotobawah.jpg';
+import profilVideo from './assets/pengganti-gambar.mp4';
+import headerLogoVideo from './assets/logo-Roychan-501.mp4';
+import aboutVideo from './assets/pengganti-gambar-dibawah.mp4';
 
 import htmlLogo from './assets/HTML_transparent.png';
 import cssLogo from './assets/CSS_transparent.png';
@@ -61,8 +63,15 @@ const App = () => {
       {/* 1. FIXED TOP NAVBAR */}
       <nav className="fixed top-0 left-0 right-0 z-50 bg-[#fafaf9] border-b-4 border-black">
         <div className="max-w-6xl mx-auto px-6 h-20 flex justify-between items-center">
-          <a href="#" className="font-black text-2xl tracking-tighter uppercase select-none">
-            Roychan501.
+          <a href="#" className="flex items-center select-none">
+            <video
+              src={headerLogoVideo}
+              autoPlay
+              loop
+              muted
+              playsInline
+              className="h-12 object-contain pointer-events-none"
+            />
           </a>
 
           {/* Desktop Menu */}
@@ -103,9 +112,16 @@ const App = () => {
         {isMenuOpen && (
           <div className="fixed inset-0 z-50 bg-black text-white flex flex-col justify-between p-8 animate-fade-in">
             <div className="flex justify-between items-center">
-              <span className="font-black text-2xl tracking-tighter uppercase">
-                Roychan501.
-              </span>
+              <div className="flex items-center">
+                <video
+                  src={headerLogoVideo}
+                  autoPlay
+                  loop
+                  muted
+                  playsInline
+                  className="h-12 object-contain pointer-events-none"
+                />
+              </div>
               <button
                 onClick={() => setIsMenuOpen(false)}
                 className="text-white text-3xl font-mono focus:outline-none hover:text-zinc-400"
@@ -168,19 +184,16 @@ const App = () => {
           </div>
 
           <div className="flex-1 flex justify-center md:justify-end w-full md:w-auto">
-            {/* Avatar Frame - No Rounded Corners, Hard Block Shadow */}
-            <div
-              className="w-64 h-64 md:w-80 md:h-80 border-4 border-black bg-stone-300 relative select-none"
-              style={{ boxShadow: '12px 12px 0 0 #000' }}
-            >
-              <img
-                src="/profil.jpeg"
-                alt="Achmad Roychan"
-                className="absolute inset-0 w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-300 pointer-events-none"
+            {/* Avatar Frame */}
+            <div className="w-64 h-64 md:w-80 md:h-80 bg-transparent relative select-none overflow-hidden">
+              <video
+                src={profilVideo}
+                autoPlay
+                loop
+                muted
+                playsInline
+                className="absolute inset-0 w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-300 pointer-events-none mix-blend-multiply"
               />
-              <div className="absolute top-2 left-2 bg-black text-white font-mono text-[10px] px-2 py-0.5 border border-white">
-                #1
-              </div>
             </div>
           </div>
 
@@ -423,18 +436,15 @@ const App = () => {
 
             {/* About Photo Panel (30%) */}
             <div className="flex-[2] flex items-center justify-center w-full">
-              <div
-                className="w-full max-w-[280px] aspect-square border-4 border-black bg-stone-100 relative select-none"
-                style={{ boxShadow: '8px 8px 0 0 #000' }}
-              >
-                <img
-                  src={aboutPhoto}
-                  alt="Tentang Achmad"
-                  className="absolute inset-0 w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-300 pointer-events-none"
+              <div className="w-full max-w-[280px] aspect-square bg-transparent relative select-none overflow-hidden">
+                <video
+                  src={aboutVideo}
+                  autoPlay
+                  loop
+                  muted
+                  playsInline
+                  className="absolute inset-0 w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-300 pointer-events-none mix-blend-multiply"
                 />
-                <div className="absolute top-2 left-2 bg-black text-white font-mono text-[10px] px-2 py-0.5 border border-white">
-                  #2
-                </div>
               </div>
             </div>
 
