@@ -179,7 +179,7 @@ const App = () => {
                 className="absolute inset-0 w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-300 pointer-events-none"
               />
               <div className="absolute top-2 left-2 bg-black text-white font-mono text-[10px] px-2 py-0.5 border border-white">
-                SYS: ACTIVE
+                #1
               </div>
             </div>
           </div>
@@ -327,7 +327,7 @@ const App = () => {
                   REUC
                 </h3>
                 <p className="font-mono text-xs uppercase text-stone-400 mb-6 border-b border-stone-800 pb-2 w-[85%] text-center">
-                  Aplikasi Reuc
+                  Website Merchandise Untuk Brand Dengan Sistem Pre-Order
                 </p>
 
                 <ul className="flex flex-wrap justify-center gap-1.5 mb-8 font-mono text-xs">
@@ -433,7 +433,7 @@ const App = () => {
                   className="absolute inset-0 w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-300 pointer-events-none"
                 />
                 <div className="absolute top-2 left-2 bg-black text-white font-mono text-[10px] px-2 py-0.5 border border-white">
-                  SYS: INFO_SEC
+                  #2
                 </div>
               </div>
             </div>
