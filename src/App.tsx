@@ -62,7 +62,7 @@ const App = () => {
       <nav className="fixed top-0 left-0 right-0 z-50 bg-[#fafaf9] border-b-4 border-black">
         <div className="max-w-6xl mx-auto px-6 h-20 flex justify-between items-center">
           <a href="#" className="font-black text-2xl tracking-tighter uppercase select-none">
-            ARR&CO.
+            Roychan501.
           </a>
 
           {/* Desktop Menu */}
@@ -104,7 +104,7 @@ const App = () => {
           <div className="fixed inset-0 z-50 bg-black text-white flex flex-col justify-between p-8 animate-fade-in">
             <div className="flex justify-between items-center">
               <span className="font-black text-2xl tracking-tighter uppercase">
-                ARR&CO.
+                Roychan501.
               </span>
               <button
                 onClick={() => setIsMenuOpen(false)}
@@ -584,7 +584,7 @@ const App = () => {
             <form onSubmit={handleSubmit} className="space-y-6 font-mono text-sm">
               {/* Web3Forms Configurations */}
               <input type="hidden" name="access_key" value="c8399c3d-17c5-49c2-9432-d09aab289e5c" />
-              <input type="hidden" name="subject" value="Pesan Baru dari Portofolio arrnco.com" />
+              <input type="hidden" name="subject" value="Pesan Baru dari Portofolio roychan501.tech" />
               <input type="hidden" name="from_name" value="Kontak Portofolio" />
 
               <div>
@@ -655,7 +655,7 @@ const App = () => {
       <footer className="bg-black text-[#fafaf9] py-8 px-6 border-t-4 border-black">
         <div className="max-w-6xl mx-auto flex flex-col md:flex-row justify-between items-center gap-4 font-mono text-xs text-stone-400">
           <div className="text-center md:text-left font-bold uppercase">
-            ARR&CO. / PORTFOLIO v2.6.0
+            Roychan501
           </div>
           <div className="text-center md:text-right">
             © 2026 ACHMAD ROYCHAN. ALL RIGHTS RESERVED.
