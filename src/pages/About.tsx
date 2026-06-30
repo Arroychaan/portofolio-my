@@ -1,8 +1,20 @@
 import { useSettings } from '../context/SettingsContext';
+import { 
+  SiNextdotjs, SiTypescript, SiTailwindcss, SiPostgresql, SiCplusplus 
+} from 'react-icons/si';
+import { FaHtml5, FaCss3Alt, FaReact, FaNodeJs, FaJava } from 'react-icons/fa';
 
 const techStack = [
-  'HTML5', 'CSS3', 'React.js', 'Next.js', 'TypeScript', 
-  'Tailwind CSS', 'Node.js', 'PostgreSQL', 'Java', 'C++'
+  { name: 'HTML5', icon: <FaHtml5 className="text-lg" /> },
+  { name: 'CSS3', icon: <FaCss3Alt className="text-lg" /> },
+  { name: 'React.js', icon: <FaReact className="text-lg" /> },
+  { name: 'Next.js', icon: <SiNextdotjs className="text-lg" /> },
+  { name: 'TypeScript', icon: <SiTypescript className="text-lg" /> },
+  { name: 'Tailwind CSS', icon: <SiTailwindcss className="text-lg" /> },
+  { name: 'Node.js', icon: <FaNodeJs className="text-lg" /> },
+  { name: 'PostgreSQL', icon: <SiPostgresql className="text-lg" /> },
+  { name: 'Java', icon: <FaJava className="text-lg" /> },
+  { name: 'C++', icon: <SiCplusplus className="text-lg" /> }
 ];
 
 export default function About() {
@@ -20,11 +32,15 @@ export default function About() {
 
       <div>
         <h2 className="text-xl font-bold text-[var(--text)] mb-6">{t('about.tech')}</h2>
-        <div className="flex flex-wrap gap-3">
+        <div className="flex flex-wrap gap-4">
           {techStack.map((tech) => (
-            <span key={tech} className="px-4 py-2 bg-[var(--bg-elevated)] border border-[var(--border)] rounded-lg text-sm font-medium text-[var(--text-muted)] hover:text-[var(--text)] hover:border-[var(--text-muted)] transition-colors cursor-default font-mono">
-              {tech}
-            </span>
+            <div 
+              key={tech.name} 
+              className="flex items-center gap-3 px-5 py-3 bg-[var(--bg-elevated)] border border-[var(--border)] rounded-xl text-sm font-medium text-[var(--text-muted)] hover:text-[var(--text)] hover:border-[var(--text-muted)] transition-all cursor-default font-sans shadow-sm"
+            >
+              {tech.icon}
+              <span>{tech.name}</span>
+            </div>
           ))}
         </div>
       </div>
