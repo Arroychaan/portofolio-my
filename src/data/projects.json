@@ -1,0 +1,55 @@
+[
+  {
+    "title": "NUTRIFY",
+    "subtitle": "Aplikasi Pelacakan Nutrisi & Kesehatan",
+    "image": "/projects/asset-nutrify.png",
+    "technologies": [
+      "REACT.JS",
+      "TAILWIND CSS",
+      "VERCEL",
+      "CHARTS.JS"
+    ],
+    "demoUrl": "https://nutrify-app-sigma.vercel.app/"
+  },
+  {
+    "title": "KUBU APP",
+    "subtitle": "Aplikasi sosial media dengan polling",
+    "image": "/projects/kubu-asset.png",
+    "technologies": [
+      "NEXT.JS",
+      "TYPESCRIPT",
+      "POSTGRES"
+    ],
+    "demoUrl": "https://kubu-app.vercel.app/"
+  },
+  {
+    "title": "REUC",
+    "subtitle": "Website Merchandise Untuk Brand Dengan Sistem Pre-Order",
+    "image": "/projects/reuc-asset.png",
+    "technologies": [
+      "REACT.JS",
+      "TAILWIND CSS"
+    ],
+    "demoUrl": "https://reuc.vercel.app/"
+  },
+  {
+    "title": "ANEKA JAJANAN",
+    "subtitle": "Katalog Aneka Jajanan",
+    "image": "/projects/asset-anekajajanan.png",
+    "technologies": [
+      "REACT.JS",
+      "TAILWIND CSS"
+    ],
+    "demoUrl": "https://anekajajanan.vercel.app/"
+  },
+  {
+    "title": "POPINLOU",
+    "subtitle": "web untuk produk umkm popinlou",
+    "image": "/projects/1782826650920-popinlou.png",
+    "technologies": [
+      "TAILWIND.CSS",
+      "NEXT.JS"
+    ],
+    "demoUrl": "http://popinlou.vercel.app"
+  }
+]
