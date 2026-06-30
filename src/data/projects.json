@@ -9,7 +9,8 @@
       "VERCEL",
       "CHARTS.JS"
     ],
-    "demoUrl": "https://nutrify-app-sigma.vercel.app/"
+    "demoUrl": "https://nutrify-app-sigma.vercel.app/",
+    "status": "completed"
   },
   {
     "title": "KUBU APP",
@@ -20,7 +21,8 @@
       "TYPESCRIPT",
       "POSTGRES"
     ],
-    "demoUrl": "https://kubu-app.vercel.app/"
+    "demoUrl": "https://kubu-app.vercel.app/",
+    "status": "completed"
   },
   {
     "title": "REUC",
@@ -30,7 +32,8 @@
       "REACT.JS",
       "TAILWIND CSS"
     ],
-    "demoUrl": "https://reuc.vercel.app/"
+    "demoUrl": "https://reuc.vercel.app/",
+    "status": "in-progress"
   },
   {
     "title": "ANEKA JAJANAN",
@@ -40,7 +43,8 @@
       "REACT.JS",
       "TAILWIND CSS"
     ],
-    "demoUrl": "https://anekajajanan.vercel.app/"
+    "demoUrl": "https://anekajajanan.vercel.app/",
+    "status": "completed"
   },
   {
     "title": "POPINLOU",
@@ -50,6 +54,7 @@
       "TAILWIND.CSS",
       "NEXT.JS"
     ],
-    "demoUrl": "http://popinlou.vercel.app"
+    "demoUrl": "http://popinlou.vercel.app",
+    "status": "completed"
   }
 ]
