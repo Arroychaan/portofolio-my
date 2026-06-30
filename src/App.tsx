@@ -1,11 +1,12 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
+import { gsap } from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import Lenis from 'lenis';
+
 import githubIcon from './assets/github-logo-png_seeklogo-304612.png';
 import linkedinIcon from './assets/linkedin.png';
 import instagramIcon from './assets/instagram.png';
 import profilVideo from './assets/pengganti-gambar.mp4';
-import headerLogoVideo from './assets/logo-Roychan-501.mp4';
-import aboutVideo from './assets/pengganti-gambar-dibawah.mp4';
-import logoMobileSidebar from './assets/logo-mobile-sidebar.png';
 
 import htmlLogo from './assets/HTML_transparent.png';
 import cssLogo from './assets/CSS_transparent.png';
@@ -18,647 +19,873 @@ import postgresqlLogo from './assets/postgresql_transparent.png';
 import javaLogo from './assets/JAVALOGO_transparent.png';
 import cppLogo from './assets/c++.png';
 
-import nutrifyImg from './assets/asset-nutrify.png';
-import kubuImg from './assets/kubu-asset.png';
-import reucImg from './assets/reuc-asset.png';
-import anekaJajananImg from './assets/asset-anekajajanan.png';
+import initialProjects from './data/projects.json';
 
-const App = () => {
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
+gsap.registerPlugin(ScrollTrigger);
 
-  const [formStatus, setFormStatus] = useState<'idle' | 'submitting' | 'success' | 'error'>('idle');
+// ═══════════════════════════════════════════════════════════════
+// ADMIN DASHBOARD (preserved from previous implementation)
+// ═══════════════════════════════════════════════════════════════
 
-  // Async Web3Forms handler
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+const AdminDashboard = () => {
+  const [token, setToken] = useState(() => localStorage.getItem('github_pat') || '');
+  const [tempToken, setTempToken] = useState('');
+  const [isEditingToken, setIsEditingToken] = useState(!token);
+
+  const [title, setTitle] = useState('');
+  const [description, setDescription] = useState('');
+  const [demoUrl, setDemoUrl] = useState('');
+  const [technologies, setTechnologies] = useState('');
+  const [imageFile, setImageFile] = useState<File | null>(null);
+
+  const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
+  const [statusMessage, setStatusMessage] = useState('');
+
+  const handleSaveToken = (e: React.FormEvent) => {
     e.preventDefault();
-    setFormStatus('submitting');
+    if (!tempToken.trim()) return;
+    localStorage.setItem('github_pat', tempToken.trim());
+    setToken(tempToken.trim());
+    setIsEditingToken(false);
+  };
 
-    const formData = new FormData(e.currentTarget);
+  const handleClearToken = () => {
+    localStorage.removeItem('github_pat');
+    setToken('');
+    setTempToken('');
+    setIsEditingToken(true);
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!token) {
+      alert("Silakan simpan Token GitHub terlebih dahulu!");
+      return;
+    }
+    if (!imageFile) {
+      alert("Silakan pilih gambar proyek!");
+      return;
+    }
+
+    setStatus('loading');
+    setStatusMessage('Mengonversi gambar...');
 
     try {
-      const response = await fetch('https://api.web3forms.com/submit', {
-        method: 'POST',
-        body: formData
+      const reader = new FileReader();
+      const base64Promise = new Promise<string>((resolve, reject) => {
+        reader.onload = () => {
+          const result = reader.result as string;
+          const base64Content = result.split(',')[1];
+          resolve(base64Content);
+        };
+        reader.onerror = reject;
+      });
+      reader.readAsDataURL(imageFile);
+      const base64Image = await base64Promise;
+
+      const fileExt = imageFile.name.split('.').pop();
+      const cleanTitle = title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
+      const filename = `${Date.now()}-${cleanTitle}.${fileExt}`;
+      const imagePath = `public/projects/${filename}`;
+
+      setStatusMessage('Mengupload gambar ke GitHub...');
+      const uploadImageResponse = await fetch(
+        `https://api.github.com/repos/Arroychaan/portofolio-my/contents/${imagePath}`,
+        {
+          method: 'PUT',
+          headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json',
+            'Accept': 'application/vnd.github.v3+json'
+          },
+          body: JSON.stringify({
+            message: `Upload project image: ${filename}`,
+            content: base64Image,
+            branch: 'main'
+          })
+        }
+      );
+
+      if (!uploadImageResponse.ok) {
+        const errData = await uploadImageResponse.json();
+        throw new Error(`Gagal mengupload gambar: ${errData.message}`);
+      }
+
+      setStatusMessage('Mengambil database proyek...');
+      const jsonPath = 'src/data/projects.json';
+      const getJsonResponse = await fetch(
+        `https://api.github.com/repos/Arroychaan/portofolio-my/contents/${jsonPath}`,
+        {
+          method: 'GET',
+          headers: {
+            'Authorization': `Bearer ${token}`,
+            'Accept': 'application/vnd.github.v3+json'
+          }
+        }
+      );
+
+      let currentSha = '';
+      let currentProjects: typeof initialProjects = [];
+
+      if (getJsonResponse.ok) {
+        const fileData = await getJsonResponse.json();
+        currentSha = fileData.sha;
+        const decodedContent = atob(fileData.content.replace(/\s/g, ''));
+        currentProjects = JSON.parse(decodedContent);
+      } else if (getJsonResponse.status === 404) {
+        currentProjects = [...initialProjects];
+      } else {
+        const errData = await getJsonResponse.json();
+        throw new Error(`Gagal membaca data proyek: ${errData.message}`);
+      }
+
+      const newProject = {
+        title: title.toUpperCase(),
+        subtitle: description,
+        image: `/projects/${filename}`,
+        technologies: technologies.split(',').map(tech => tech.trim().toUpperCase()).filter(Boolean),
+        demoUrl: demoUrl
+      };
+
+      const updatedProjects = [...currentProjects, newProject];
+      const updatedJsonString = JSON.stringify(updatedProjects, null, 2);
+      const encodedJson = btoa(unescape(encodeURIComponent(updatedJsonString)));
+
+      setStatusMessage('Memperbarui data proyek di GitHub...');
+      const updateJsonBody: Record<string, string> = {
+        message: `Add project: ${title}`,
+        content: encodedJson,
+        branch: 'main'
+      };
+      if (currentSha) {
+        updateJsonBody.sha = currentSha;
+      }
+
+      const updateJsonResponse = await fetch(
+        `https://api.github.com/repos/Arroychaan/portofolio-my/contents/${jsonPath}`,
+        {
+          method: 'PUT',
+          headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json',
+            'Accept': 'application/vnd.github.v3+json'
+          },
+          body: JSON.stringify(updateJsonBody)
+        }
+      );
+
+      if (!updateJsonResponse.ok) {
+        const errData = await updateJsonResponse.json();
+        throw new Error(`Gagal memperbarui file JSON: ${errData.message}`);
+      }
+
+      setStatus('success');
+      setStatusMessage('Proyek berhasil ditambahkan otomatis! Halaman akan di-rebuild oleh Vercel.');
+      setTitle('');
+      setDescription('');
+      setDemoUrl('');
+      setTechnologies('');
+      setImageFile(null);
+      const fileInput = document.getElementById('project-image') as HTMLInputElement;
+      if (fileInput) fileInput.value = '';
+
+    } catch (error: unknown) {
+      console.error(error);
+      setStatus('error');
+      setStatusMessage(error instanceof Error ? error.message : 'Terjadi kesalahan.');
+    }
+  };
+
+  return (
+    <div style={{ cursor: 'auto' }} className="min-h-screen bg-[#fafaf9] text-[#1c1917] font-sans antialiased p-6 flex flex-col items-center justify-center">
+      <div className="w-full max-w-xl bg-white border-4 border-black p-6 md:p-8 shadow-[8px_8px_0_0_#000]">
+        <div className="flex justify-between items-center border-b-4 border-black pb-4 mb-6">
+          <h1 className="text-2xl font-black uppercase tracking-tight">ADMIN DASHBOARD</h1>
+          <a
+            href="#"
+            style={{ cursor: 'pointer' }}
+            className="border-2 border-black bg-white hover:bg-black hover:text-white px-3 py-1 font-mono text-xs font-bold uppercase transition-colors shadow-[2px_2px_0_0_#000] hover:shadow-none"
+          >
+            ← KEMBALI
+          </a>
+        </div>
+
+        <div className="border-2 border-black p-4 mb-6 bg-stone-100 font-mono text-xs">
+          <h2 className="font-bold uppercase mb-2">GitHub Token</h2>
+          {isEditingToken ? (
+            <form onSubmit={handleSaveToken} className="space-y-3">
+              <p className="text-stone-600 uppercase text-[10px]">
+                Masukkan Personal Access Token (PAT) GitHub dengan izin 'repo'. Tersimpan secara lokal.
+              </p>
+              <div className="flex gap-2">
+                <input
+                  type="password"
+                  placeholder="ghp_xxxxxxxxxxxxxxxx"
+                  value={tempToken}
+                  onChange={(e) => setTempToken(e.target.value)}
+                  style={{ cursor: 'text' }}
+                  className="flex-1 border-2 border-black p-2 bg-white focus:outline-none"
+                  required
+                />
+                <button
+                  type="submit"
+                  style={{ cursor: 'pointer' }}
+                  className="border-2 border-black bg-black text-white hover:bg-white hover:text-black px-4 py-2 font-bold uppercase"
+                >
+                  SIMPAN
+                </button>
+              </div>
+            </form>
+          ) : (
+            <div className="flex justify-between items-center">
+              <span className="font-bold text-green-700">✓ TOKEN TERSIMPAN</span>
+              <button
+                onClick={handleClearToken}
+                style={{ cursor: 'pointer' }}
+                className="border border-black bg-white text-black hover:bg-stone-200 px-2 py-1 font-bold text-[10px]"
+              >
+                HAPUS TOKEN
+              </button>
+            </div>
+          )}
+        </div>
+
+        <form onSubmit={handleSubmit} className="space-y-5 font-mono text-sm">
+          <div>
+            <label className="block text-xs font-bold uppercase tracking-wider text-stone-500 mb-1.5">Nama Proyek</label>
+            <input type="text" required placeholder="CONTOH: NUTRIFY" value={title} onChange={(e) => setTitle(e.target.value)} disabled={isEditingToken || status === 'loading'} style={{ cursor: 'text' }} className="w-full border-2 border-black p-3 bg-stone-50 focus:outline-none focus:bg-white placeholder-stone-400 font-bold uppercase rounded-none" />
+          </div>
+          <div>
+            <label className="block text-xs font-bold uppercase tracking-wider text-stone-500 mb-1.5">Deskripsi Proyek (Subtitle)</label>
+            <input type="text" required placeholder="CONTOH: APLIKASI PELACAK NUTRISI" value={description} onChange={(e) => setDescription(e.target.value)} disabled={isEditingToken || status === 'loading'} style={{ cursor: 'text' }} className="w-full border-2 border-black p-3 bg-stone-50 focus:outline-none focus:bg-white placeholder-stone-400 font-bold uppercase rounded-none" />
+          </div>
+          <div>
+            <label className="block text-xs font-bold uppercase tracking-wider text-stone-500 mb-1.5">Link Proyek (Demo URL)</label>
+            <input type="url" required placeholder="CONTOH: HTTPS://NUTRIFY.VERCEL.APP" value={demoUrl} onChange={(e) => setDemoUrl(e.target.value)} disabled={isEditingToken || status === 'loading'} style={{ cursor: 'text' }} className="w-full border-2 border-black p-3 bg-stone-50 focus:outline-none focus:bg-white placeholder-stone-400 rounded-none" />
+          </div>
+          <div>
+            <label className="block text-xs font-bold uppercase tracking-wider text-stone-500 mb-1.5">Teknologi / Stack (Pisahkan dengan koma)</label>
+            <input type="text" placeholder="CONTOH: REACT.JS, TAILWIND CSS, VERCEL" value={technologies} onChange={(e) => setTechnologies(e.target.value)} disabled={isEditingToken || status === 'loading'} style={{ cursor: 'text' }} className="w-full border-2 border-black p-3 bg-stone-50 focus:outline-none focus:bg-white placeholder-stone-400 font-bold uppercase rounded-none" />
+          </div>
+          <div>
+            <label className="block text-xs font-bold uppercase tracking-wider text-stone-500 mb-1.5">Gambar Proyek</label>
+            <input id="project-image" type="file" accept="image/*" required onChange={(e) => { if (e.target.files && e.target.files[0]) setImageFile(e.target.files[0]); }} disabled={isEditingToken || status === 'loading'} style={{ cursor: 'pointer' }} className="w-full border-2 border-black p-3 bg-stone-50 focus:outline-none focus:bg-white text-xs rounded-none" />
+          </div>
+
+          {status !== 'idle' && (
+            <div className={`border-2 border-black p-3 text-xs uppercase font-bold ${
+              status === 'loading' ? 'bg-amber-100 text-amber-900 border-amber-900' :
+              status === 'success' ? 'bg-green-100 text-green-900 border-green-900' :
+              'bg-red-100 text-red-900 border-red-900'
+            }`}>
+              {status === 'loading' ? '⏳ ' : status === 'success' ? '✓ ' : '✕ '}
+              {statusMessage}
+            </div>
+          )}
+
+          <button
+            type="submit"
+            disabled={isEditingToken || status === 'loading'}
+            style={{ cursor: isEditingToken || status === 'loading' ? 'not-allowed' : 'pointer' }}
+            className={`w-full border-2 border-black p-4 font-bold uppercase transition-all shadow-[4px_4px_0_0_#78716c] hover:shadow-none translate-y-0 active:translate-y-1 rounded-none ${
+              isEditingToken || status === 'loading'
+                ? 'bg-stone-200 text-stone-400 cursor-not-allowed shadow-none translate-y-1'
+                : 'bg-black text-white hover:bg-stone-100 hover:text-black'
+            }`}
+          >
+            {status === 'loading' ? 'PROSES SUBMIT...' : 'TAMBAHKAN PORTFOLIO'}
+          </button>
+        </form>
+      </div>
+    </div>
+  );
+};
+
+
+// ═══════════════════════════════════════════════════════════════
+// CUSTOM CURSOR
+// ═══════════════════════════════════════════════════════════════
+
+const CustomCursor = () => {
+  const cursorRef = useRef<HTMLDivElement>(null);
+  const pos = useRef({ x: 0, y: 0 });
+  const target = useRef({ x: 0, y: 0 });
+  const rafId = useRef<number>(0);
+
+  useEffect(() => {
+    const isMobile = window.matchMedia('(max-width: 768px)').matches;
+    if (isMobile) return;
+
+    const handleMouseMove = (e: MouseEvent) => {
+      target.current = { x: e.clientX, y: e.clientY };
+    };
+
+    const handleMouseOver = (e: MouseEvent) => {
+      const el = e.target as HTMLElement;
+      if (el.closest('a, button, [data-cursor-hover]')) {
+        cursorRef.current?.classList.add('is-hovering');
+      }
+    };
+
+    const handleMouseOut = (e: MouseEvent) => {
+      const el = e.target as HTMLElement;
+      if (el.closest('a, button, [data-cursor-hover]')) {
+        cursorRef.current?.classList.remove('is-hovering');
+      }
+    };
+
+    const animate = () => {
+      pos.current.x += (target.current.x - pos.current.x) * 0.15;
+      pos.current.y += (target.current.y - pos.current.y) * 0.15;
+      if (cursorRef.current) {
+        cursorRef.current.style.transform = `translate(${pos.current.x - 8}px, ${pos.current.y - 8}px)`;
+      }
+      rafId.current = requestAnimationFrame(animate);
+    };
+
+    window.addEventListener('mousemove', handleMouseMove);
+    document.addEventListener('mouseover', handleMouseOver);
+    document.addEventListener('mouseout', handleMouseOut);
+    rafId.current = requestAnimationFrame(animate);
+
+    return () => {
+      window.removeEventListener('mousemove', handleMouseMove);
+      document.removeEventListener('mouseover', handleMouseOver);
+      document.removeEventListener('mouseout', handleMouseOut);
+      cancelAnimationFrame(rafId.current);
+    };
+  }, []);
+
+  return <div ref={cursorRef} className="custom-cursor" />;
+};
+
+
+// ═══════════════════════════════════════════════════════════════
+// PRELOADER
+// ═══════════════════════════════════════════════════════════════
+
+const Preloader = ({ onComplete }: { onComplete: () => void }) => {
+  const containerRef = useRef<HTMLDivElement>(null);
+  const textRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (!textRef.current || !containerRef.current) return;
+
+    const text = "ROYCHAN";
+    textRef.current.innerHTML = text
+      .split('')
+      .map(char => `<span class="char">${char}</span>`)
+      .join('');
+
+    const chars = textRef.current.querySelectorAll('.char');
+
+    const tl = gsap.timeline({
+      onComplete: () => {
+        gsap.to(containerRef.current, {
+          opacity: 0,
+          duration: 0.6,
+          ease: 'power2.inOut',
+          onComplete,
+        });
+      },
+    });
+
+    tl.to(chars, {
+      opacity: 1,
+      y: 0,
+      stagger: 0.08,
+      duration: 0.5,
+      ease: 'power3.out',
+      delay: 0.3,
+    });
+
+    tl.to(chars, {
+      opacity: 0,
+      y: -30,
+      stagger: 0.04,
+      duration: 0.3,
+      ease: 'power2.in',
+      delay: 0.4,
+    });
+  }, [onComplete]);
+
+  return (
+    <div ref={containerRef} className="preloader">
+      <div ref={textRef} className="preloader-text" />
+    </div>
+  );
+};
+
+
+// ═══════════════════════════════════════════════════════════════
+// MAIN APP
+// ═══════════════════════════════════════════════════════════════
+
+const techStack = [
+  { name: 'HTML', icon: htmlLogo },
+  { name: 'CSS', icon: cssLogo },
+  { name: 'React.js', icon: reactLogo },
+  { name: 'Next.js', icon: nextjsLogo },
+  { name: 'TypeScript', icon: typescriptLogo },
+  { name: 'Tailwind', icon: tailwindLogo },
+  { name: 'Node.js', icon: nodejsLogo },
+  { name: 'PostgreSQL', icon: postgresqlLogo },
+  { name: 'Java', icon: javaLogo },
+  { name: 'C++', icon: cppLogo },
+];
+
+const App = () => {
+  const [currentHash, setCurrentHash] = useState(window.location.hash);
+  const [isLoading, setIsLoading] = useState(true);
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [formStatus, setFormStatus] = useState<'idle' | 'submitting' | 'success' | 'error'>('idle');
+
+  // Refs for GSAP animations
+  const heroRef = useRef<HTMLElement>(null);
+  const heroNameRef = useRef<HTMLHeadingElement>(null);
+  const projectsSectionRef = useRef<HTMLElement>(null);
+  const projectsTrackRef = useRef<HTMLDivElement>(null);
+  const aboutTextRef = useRef<HTMLParagraphElement>(null);
+  const techRef = useRef<HTMLElement>(null);
+  const contactRef = useRef<HTMLElement>(null);
+  const lenisRef = useRef<Lenis | null>(null);
+
+  // Hash routing
+  useEffect(() => {
+    const handleHashChange = () => setCurrentHash(window.location.hash);
+    window.addEventListener('hashchange', handleHashChange);
+    return () => window.removeEventListener('hashchange', handleHashChange);
+  }, []);
+
+  const isAdmin = currentHash === '#/admin';
+
+  // Initialize Lenis + GSAP after preloader
+  useEffect(() => {
+    if (isLoading || isAdmin) return;
+
+    const lenis = new Lenis({
+      lerp: 0.1,
+      smoothWheel: true,
+    });
+    lenisRef.current = lenis;
+
+    lenis.on('scroll', ScrollTrigger.update);
+
+    gsap.ticker.add((time) => {
+      lenis.raf(time * 1000);
+    });
+    gsap.ticker.lagSmoothing(0);
+
+    return () => {
+      lenis.destroy();
+      gsap.ticker.remove(lenis.raf as unknown as gsap.TickerCallback);
+    };
+  }, [isLoading, isAdmin]);
+
+  // GSAP Animations
+  useEffect(() => {
+    if (isLoading || isAdmin) return;
+
+    const ctx = gsap.context(() => {
+      // ── Hero animation ──
+      if (heroNameRef.current) {
+        gsap.fromTo(heroNameRef.current, 
+          { opacity: 0, y: 80 },
+          { opacity: 1, y: 0, duration: 1.2, ease: 'power3.out', delay: 0.2 }
+        );
+      }
+
+      // Hero subtitle + scroll indicator
+      gsap.fromTo('.hero-subtitle',
+        { opacity: 0, y: 30 },
+        { opacity: 1, y: 0, duration: 0.8, ease: 'power2.out', delay: 0.8 }
+      );
+      gsap.fromTo('.scroll-indicator',
+        { opacity: 0 },
+        { opacity: 1, duration: 0.6, delay: 1.2 }
+      );
+
+      // Hero parallax on scroll
+      if (heroRef.current && heroNameRef.current) {
+        gsap.to(heroNameRef.current, {
+          y: -150,
+          opacity: 0,
+          ease: 'none',
+          scrollTrigger: {
+            trigger: heroRef.current,
+            start: 'top top',
+            end: 'bottom top',
+            scrub: true,
+          },
+        });
+      }
+
+      // ── Projects horizontal scroll (desktop only) ──
+      const mm = gsap.matchMedia();
+
+      mm.add('(min-width: 769px)', () => {
+        if (projectsSectionRef.current && projectsTrackRef.current) {
+          const panels = projectsTrackRef.current.querySelectorAll('.project-panel');
+          const totalScroll = (panels.length - 1) * window.innerWidth;
+
+          gsap.to(projectsTrackRef.current, {
+            x: -totalScroll,
+            ease: 'none',
+            scrollTrigger: {
+              trigger: projectsSectionRef.current,
+              start: 'top top',
+              end: `+=${totalScroll}`,
+              pin: true,
+              scrub: 1,
+              anticipatePin: 1,
+              onUpdate: (self) => {
+                const panelIndex = Math.round(self.progress * (panels.length - 1));
+                panels.forEach((panel, i) => {
+                  if (i === panelIndex) {
+                    panel.classList.add('is-active');
+                  } else {
+                    panel.classList.remove('is-active');
+                  }
+                });
+              },
+            },
+          });
+        }
       });
 
-      const data = await response.json();
+      mm.add('(max-width: 768px)', () => {
+        // On mobile, reveal projects vertically
+        const panels = document.querySelectorAll('.project-panel');
+        panels.forEach((panel) => {
+          panel.classList.add('is-active');
+          gsap.fromTo(panel,
+            { opacity: 0, y: 60 },
+            {
+              opacity: 1, y: 0, duration: 0.8, ease: 'power2.out',
+              scrollTrigger: { trigger: panel, start: 'top 85%', toggleActions: 'play none none none' },
+            }
+          );
+        });
+      });
 
+      // ── About text word-highlight ──
+      if (aboutTextRef.current) {
+        const words = aboutTextRef.current.querySelectorAll('.word');
+        words.forEach((word, i) => {
+          gsap.to(word, {
+            className: 'word is-highlighted',
+            scrollTrigger: {
+              trigger: word,
+              start: 'top 80%',
+              end: 'top 40%',
+              scrub: true,
+            },
+            delay: i * 0.01,
+          });
+        });
+      }
+
+      // ── Section reveals ──
+      const revealSections = document.querySelectorAll('.section-reveal');
+      revealSections.forEach((section) => {
+        gsap.fromTo(section,
+          { opacity: 0, y: 60 },
+          {
+            opacity: 1, y: 0, duration: 1, ease: 'power2.out',
+            scrollTrigger: {
+              trigger: section,
+              start: 'top 85%',
+              toggleActions: 'play none none none',
+            },
+          }
+        );
+      });
+    });
+
+    return () => ctx.revert();
+  }, [isLoading, isAdmin]);
+
+
+  // Contact form handler (Web3Forms)
+  const handleSubmit = useCallback(async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setFormStatus('submitting');
+    const formData = new FormData(e.currentTarget);
+    try {
+      const response = await fetch('https://api.web3forms.com/submit', { method: 'POST', body: formData });
+      const data = await response.json();
       if (data.success) {
         setFormStatus('success');
         e.currentTarget.reset();
         setTimeout(() => setFormStatus('idle'), 3500);
       } else {
         setFormStatus('error');
-        alert(data.message || 'Gagal mengirim pesan. Silakan coba lagi.');
         setTimeout(() => setFormStatus('idle'), 3500);
       }
-    } catch (error) {
+    } catch {
       setFormStatus('error');
-      alert('Terjadi kesalahan koneksi. Silakan periksa koneksi internet Anda.');
       setTimeout(() => setFormStatus('idle'), 3500);
     }
-  };
+  }, []);
+
+
+  // ── Admin route ──
+  if (isAdmin) {
+    return <AdminDashboard />;
+  }
+
+  // ── Loading screen ──
+  if (isLoading) {
+    return <Preloader onComplete={() => setIsLoading(false)} />;
+  }
+
+  // ── About text with word splitting ──
+  const aboutContent = "Saya adalah pengembang perangkat lunak yang berfokus pada efisiensi baris kode, arsitektur data yang kokoh, dan pengalaman pengguna yang intuitif. Memiliki ketertarikan tinggi pada performa website modern, optimalisasi backend, dan desain antarmuka yang presisi.";
+  const aboutWords = aboutContent.split(' ');
 
   return (
-    <div className="min-h-screen bg-[#fafaf9] text-[#1c1917] font-sans antialiased selection:bg-black selection:text-white">
-      {/* 1. FIXED TOP NAVBAR */}
-      <nav className="fixed top-0 left-0 right-0 z-50 bg-[#fafaf9] border-b-4 border-black">
-        <div className="max-w-6xl mx-auto px-6 h-20 flex justify-between items-center">
-          <a href="#" className="flex items-center select-none">
-            <video
-              src={headerLogoVideo}
-              autoPlay
-              loop
-              muted
-              playsInline
-              className="h-12 object-contain pointer-events-none"
-            />
+    <>
+      <CustomCursor />
+
+      {/* ══ NAVBAR ══ */}
+      <nav className="fixed top-0 left-0 right-0 z-50 mix-blend-difference">
+        <div className="max-w-[1400px] mx-auto px-6 md:px-12 h-20 flex justify-between items-center">
+          <a href="#" className="font-heading text-sm font-bold uppercase tracking-widest text-white">
+            ROYCHAN<span className="text-[var(--accent)]">501</span>
           </a>
 
-          {/* Desktop Menu */}
-          <ul className="hidden md:flex gap-10 font-mono text-sm font-bold uppercase">
-            <li>
-              <a href="#projects" className="relative py-1 group">
-                PROYEK
-                <span className="absolute left-0 bottom-0 w-full h-[3px] bg-black scale-x-0 group-hover:scale-x-100 transition-transform origin-left duration-200"></span>
-              </a>
-            </li>
-            <li>
-              <a href="#about" className="relative py-1 group">
-                TENTANG
-                <span className="absolute left-0 bottom-0 w-full h-[3px] bg-black scale-x-0 group-hover:scale-x-100 transition-transform origin-left duration-200"></span>
-              </a>
-            </li>
-            <li>
-              <a href="#contact" className="relative py-1 group">
-                KONTAK
-                <span className="absolute left-0 bottom-0 w-full h-[3px] bg-black scale-x-0 group-hover:scale-x-100 transition-transform origin-left duration-200"></span>
-              </a>
-            </li>
+          {/* Desktop menu */}
+          <ul className="hidden md:flex gap-10 font-mono text-xs font-bold uppercase tracking-widest text-white">
+            <li><a href="#projects" className="hover:text-[var(--accent)] transition-colors duration-300">Proyek</a></li>
+            <li><a href="#about" className="hover:text-[var(--accent)] transition-colors duration-300">Tentang</a></li>
+            <li><a href="#contact" className="hover:text-[var(--accent)] transition-colors duration-300">Kontak</a></li>
           </ul>
 
-          {/* Mobile Hamburger Button */}
+          {/* Mobile hamburger */}
           <button
             onClick={() => setIsMenuOpen(true)}
-            className="md:hidden flex flex-col gap-1.5 justify-center items-end w-8 h-8 focus:outline-none"
+            className="md:hidden flex flex-col gap-1.5 w-7 h-7 justify-center"
             aria-label="Toggle Menu"
           >
-            <span className="w-8 h-1 bg-black"></span>
-            <span className="w-6 h-1 bg-black"></span>
-            <span className="w-7 h-1 bg-black"></span>
+            <span className="w-7 h-[2px] bg-white" />
+            <span className="w-5 h-[2px] bg-white" />
           </button>
         </div>
-
-        {/* Mobile Fullscreen Overlay Menu */}
-        {isMenuOpen && (
-          <div className="fixed inset-0 z-50 bg-black text-white flex flex-col justify-between p-8 animate-fade-in">
-            <div className="flex justify-between items-center">
-              <div className="flex items-center">
-                <img
-                  src={logoMobileSidebar}
-                  alt="Roychan501"
-                  className="h-20 object-contain"
-                />
-              </div>
-              <button
-                onClick={() => setIsMenuOpen(false)}
-                className="text-white text-3xl font-mono focus:outline-none hover:text-zinc-400"
-                aria-label="Close Menu"
-              >
-                ✕
-              </button>
-            </div>
-            <ul className="flex flex-col gap-8 text-center font-mono text-3xl font-extrabold uppercase tracking-wider my-auto">
-              <li>
-                <a
-                  href="#projects"
-                  onClick={() => setIsMenuOpen(false)}
-                  className="hover:line-through hover:text-zinc-400"
-                >
-                  PROYEK
-                </a>
-              </li>
-              <li>
-                <a
-                  href="#about"
-                  onClick={() => setIsMenuOpen(false)}
-                  className="hover:line-through hover:text-zinc-400"
-                >
-                  TENTANG
-                </a>
-              </li>
-              <li>
-                <a
-                  href="#contact"
-                  onClick={() => setIsMenuOpen(false)}
-                  className="hover:line-through hover:text-zinc-400"
-                >
-                  KONTAK
-                </a>
-              </li>
-            </ul>
-            <div className="text-center font-mono text-xs text-zinc-500">
-              © 2026 ACHMAD ROYCHAN. ALL RIGHTS RESERVED.
-            </div>
-          </div>
-        )}
       </nav>
 
-      {/* GLOBAL WRAPPER */}
-      <div className="max-w-6xl mx-auto px-6 pt-32 pb-16">
+      {/* Mobile fullscreen menu */}
+      {isMenuOpen && (
+        <div className="fixed inset-0 z-[100] bg-[var(--bg)] flex flex-col justify-center items-center">
+          <button
+            onClick={() => setIsMenuOpen(false)}
+            className="absolute top-6 right-6 text-[var(--text)] text-2xl font-mono"
+            aria-label="Close Menu"
+          >
+            ✕
+          </button>
+          <ul className="flex flex-col gap-8 text-center font-heading text-3xl font-bold uppercase tracking-wide text-[var(--text)]">
+            <li><a href="#projects" onClick={() => setIsMenuOpen(false)} className="hover:text-[var(--accent)] transition-colors">Proyek</a></li>
+            <li><a href="#about" onClick={() => setIsMenuOpen(false)} className="hover:text-[var(--accent)] transition-colors">Tentang</a></li>
+            <li><a href="#contact" onClick={() => setIsMenuOpen(false)} className="hover:text-[var(--accent)] transition-colors">Kontak</a></li>
+          </ul>
+          <p className="absolute bottom-8 font-mono text-xs text-[var(--text-muted)]">© 2026 ACHMAD ROYCHAN</p>
+        </div>
+      )}
 
-        {/* 2. HERO SECTION */}
-        <header className="min-h-[75vh] md:min-h-[80vh] flex flex-col md:flex-row items-center justify-between gap-12 border-b-4 border-black pb-16 mb-16 relative">
-          <div className="flex-1 space-y-6">
-            <h1 className="text-5xl md:text-7xl lg:text-8xl font-black uppercase leading-[0.9] tracking-tighter">
-              HELLO! <br />
-              <span className="inline-block bg-black text-white px-4 py-2 mt-2 select-none border-2 border-black shadow-[4px_4px_0_0_#a8a29e]">
-                I'M ROYCHAN.
-              </span>
-            </h1>
-            <p className="font-mono text-base md:text-lg text-stone-600 border-l-4 border-black pl-4 py-2 max-w-xl uppercase bg-stone-100">
-              A multidisciplinary developer with a focus on core web performance, solid architecture, and clean technical execution.
-            </p>
-          </div>
-
-          <div className="flex-1 flex justify-center md:justify-end w-full md:w-auto">
-            {/* Avatar Frame */}
-            <div className="w-64 h-64 md:w-80 md:h-80 bg-transparent relative select-none overflow-hidden">
-              <video
-                src={profilVideo}
-                autoPlay
-                loop
-                muted
-                playsInline
-                className="absolute inset-0 w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-300 pointer-events-none mix-blend-multiply"
-              />
-            </div>
-          </div>
-
-          {/* Down Bouncing Scroll Indicator */}
-          <div className="absolute bottom-4 left-1/2 -translate-x-1/2 hidden md:flex flex-col items-center gap-1">
-            <span className="font-mono text-xs font-bold uppercase tracking-wider text-stone-500 animate-pulse">
-              SCROLL DOWN
-            </span>
-            <svg
-              className="w-6 h-6 animate-bounce text-black"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-              strokeWidth={3}
-            >
-              <path strokeLinecap="round" strokeLinejoin="round" d="M19 14l-7 7m0 0l-7-7m7 7V3" />
-            </svg>
-          </div>
-        </header>
-
-        {/* 3. NOTES BANNER */}
-        <div className="mb-6 flex justify-between items-center">
-          <p className="hidden md:block font-mono text-sm font-bold uppercase text-stone-500 bg-stone-100 px-3 py-1 border border-zinc-300">
-            [+] Hover over any project to learn more
-          </p>
-          <p className="block md:hidden font-mono text-sm font-bold uppercase text-stone-500 bg-stone-100 px-3 py-1 border border-zinc-300 w-full text-center">
-            [+] Tap any project to learn more
+      {/* ══ HERO ══ */}
+      <header ref={heroRef} className="min-h-screen flex flex-col justify-center items-center relative px-6">
+        <div className="text-center">
+          <h1 ref={heroNameRef} className="hero-name">ROYCHAN</h1>
+          <p className="hero-subtitle mt-6">
+            Developer&nbsp;&nbsp;·&nbsp;&nbsp;Architect&nbsp;&nbsp;·&nbsp;&nbsp;Creator
           </p>
         </div>
 
-        {/* 4. PROJECTS SECTION */}
-        <section id="projects" className="space-y-12 mb-24">
-          {/* ROW 1: Project 1 (60%) and Project 2 (37%) */}
-          <div className="flex flex-col md:flex-row justify-between gap-8 md:gap-12">
-
-            {/* Project 1: Nutrify (60% Width) */}
-            <div
-              className="group relative w-full md:w-[60%] h-[350px] md:h-[400px] border-4 border-black bg-stone-900 overflow-hidden cursor-pointer shadow-[8px_8px_0_0_#000]"
-            >
-              {/* Mobile LiveBadge */}
-              <a href="https://nutrify-app-sigma.vercel.app/" target="_blank" rel="noreferrer" className="absolute top-4 right-4 bg-white text-black px-3 py-1 font-mono text-[10px] font-black uppercase border-2 border-black md:hidden shadow-[2px_2px_0_0_#000] z-[20]">
-                🔴 TAP FOR LIVE
-              </a>
-
-              {/* Image Layer */}
-              <div className="absolute inset-0 flex items-center justify-center select-none overflow-hidden transition-transform duration-500 group-hover:scale-105 bg-stone-200">
-                <img src={nutrifyImg} alt="Nutrify" className="w-full h-full object-cover grayscale" />
-              </div>
-
-              {/* Instant Hover Overlay */}
-              <div className="absolute inset-0 bg-black text-white flex flex-col items-center justify-center p-6 opacity-0 group-hover:opacity-100 transition-opacity duration-200 z-10">
-                <h3 className="text-3xl md:text-4xl font-black uppercase tracking-tight mb-1">
-                  NUTRIFY
-                </h3>
-                <p className="font-mono text-xs md:text-sm uppercase text-stone-400 mb-6 border-b border-stone-800 pb-2 w-[80%] text-center">
-                  Aplikasi Pelacakan Nutrisi & Kesehatan
-                </p>
-
-                <ul className="flex flex-wrap justify-center gap-2 mb-8 font-mono text-xs">
-                  <li className="border border-stone-700 bg-stone-900 text-stone-300 px-3 py-1">REACT.JS</li>
-                  <li className="border border-stone-700 bg-stone-900 text-stone-300 px-3 py-1">TAILWIND CSS</li>
-                  <li className="border border-stone-700 bg-stone-900 text-stone-300 px-3 py-1">VERCEL</li>
-                  <li className="border border-stone-700 bg-stone-900 text-stone-300 px-3 py-1">CHARTS.JS</li>
-                </ul>
-
-                <div className="flex gap-4">
-                  <a
-                    href="https://nutrify-app-sigma.vercel.app/"
-                    target="_blank"
-                    rel="noreferrer"
-                    className="border-2 border-white bg-white text-black hover:bg-stone-200 px-5 py-2 font-mono text-sm font-bold uppercase transition-colors"
-                  >
-                    LiveDEMO ↗
-                  </a>
-                </div>
-              </div>
-            </div>
-
-            {/* Project 2: Kubu App (37% Width) */}
-            <div
-              className="group relative w-full md:w-[37%] h-[350px] md:h-[400px] border-4 border-black bg-stone-900 overflow-hidden cursor-pointer shadow-[8px_8px_0_0_#000]"
-            >
-              {/* Mobile LiveBadge */}
-              <a href="https://kubu-app.vercel.app/" target="_blank" rel="noreferrer" className="absolute top-4 right-4 bg-white text-black px-3 py-1 font-mono text-[10px] font-black uppercase border-2 border-black md:hidden shadow-[2px_2px_0_0_#000] z-[20]">
-                🔴 TAP FOR LIVE
-              </a>
-
-              {/* Image Layer */}
-              <div className="absolute inset-0 flex items-center justify-center select-none overflow-hidden transition-transform duration-500 group-hover:scale-105 bg-stone-200">
-                <img src={kubuImg} alt="Kubu App" className="w-full h-full object-cover grayscale" />
-              </div>
-
-              {/* Instant Hover Overlay */}
-              <div className="absolute inset-0 bg-black text-white flex flex-col items-center justify-center p-6 opacity-0 group-hover:opacity-100 transition-opacity duration-200 z-10">
-                <h3 className="text-3xl font-black uppercase tracking-tight mb-1 text-center">
-                  KUBU APP
-                </h3>
-                <p className="font-mono text-xs uppercase text-stone-400 mb-6 border-b border-stone-800 pb-2 w-[85%] text-center">
-                  Aplikasi sosial media dengan polling
-                </p>
-
-                <ul className="flex flex-wrap justify-center gap-1.5 mb-8 font-mono text-xs">
-                  <li className="border border-stone-700 bg-stone-900 text-stone-300 px-2.5 py-1">NEXT.JS</li>
-                  <li className="border border-stone-700 bg-stone-900 text-stone-300 px-2.5 py-1">TYPESCRIPT</li>
-                  <li className="border border-stone-700 bg-stone-900 text-stone-300 px-2.5 py-1">POSTGRES</li>
-                </ul>
-
-                <div className="flex gap-3">
-                  <a
-                    href="https://kubu-app.vercel.app/"
-                    target="_blank"
-                    rel="noreferrer"
-                    className="border-2 border-white bg-white text-black hover:bg-stone-200 px-4 py-2 font-mono text-xs font-bold uppercase transition-colors"
-                  >
-                    LiveDEMO ↗
-                  </a>
-                </div>
-              </div>
-            </div>
-
+        {/* Profile video — subtle floating element */}
+        <div className="absolute bottom-[15vh] right-[8vw] hidden lg:block">
+          <div className="w-24 h-24 rounded-full overflow-hidden border border-[var(--border-light)] opacity-40 hover:opacity-80 transition-opacity duration-500">
+            <video src={profilVideo} autoPlay loop muted playsInline className="w-full h-full object-cover" />
           </div>
+        </div>
 
-          {/* ROW 2: Project 3 (37%) and Project 4 (60%) */}
-          <div className="flex flex-col md:flex-row justify-between gap-8 md:gap-12">
+        {/* Scroll indicator */}
+        <div className="scroll-indicator absolute bottom-12 flex flex-col items-center gap-2">
+          <span className="font-mono text-[10px] uppercase tracking-[0.2em] text-[var(--text-muted)]">Scroll</span>
+          <svg width="16" height="24" viewBox="0 0 16 24" fill="none" className="text-[var(--text-muted)]">
+            <path d="M8 4L8 20M8 20L2 14M8 20L14 14" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+          </svg>
+        </div>
+      </header>
 
-            {/* Project 3: Reuc (37% Width) */}
-            <div
-              className="group relative w-full md:w-[37%] h-[350px] md:h-[400px] border-4 border-black bg-stone-900 overflow-hidden cursor-pointer shadow-[8px_8px_0_0_#000]"
-            >
-              {/* Mobile LiveBadge */}
-              <a href="https://reuc.vercel.app/" target="_blank" rel="noreferrer" className="absolute top-4 right-4 bg-white text-black px-3 py-1 font-mono text-[10px] font-black uppercase border-2 border-black md:hidden shadow-[2px_2px_0_0_#000] z-[20]">
-                🔴 TAP FOR LIVE
-              </a>
+      {/* ══ PROJECTS — HORIZONTAL SCROLL ══ */}
+      <section ref={projectsSectionRef} id="projects" className="relative overflow-hidden">
+        {/* Section header */}
+        <div className="absolute top-6 left-6 md:left-12 z-10 font-mono text-[10px] uppercase tracking-[0.2em] text-[var(--text-muted)]">
+          Selected Works
+        </div>
 
-              {/* Image Layer */}
-              <div className="absolute inset-0 flex items-center justify-center select-none overflow-hidden transition-transform duration-500 group-hover:scale-105 bg-stone-200">
-                <img src={reucImg} alt="Reuc" className="w-full h-full object-cover grayscale" />
+        <div ref={projectsTrackRef} className="projects-track md:flex-nowrap flex-wrap md:flex">
+          {initialProjects.map((project, index) => (
+            <div key={project.title} className="project-panel">
+              <div className="project-counter">
+                {String(index + 1).padStart(2, '0')} / {String(initialProjects.length).padStart(2, '0')}
               </div>
 
-              {/* Instant Hover Overlay */}
-              <div className="absolute inset-0 bg-black text-white flex flex-col items-center justify-center p-6 opacity-0 group-hover:opacity-100 transition-opacity duration-200 z-10">
-                <h3 className="text-3xl font-black uppercase tracking-tight mb-1 text-center">
-                  REUC
-                </h3>
-                <p className="font-mono text-xs uppercase text-stone-400 mb-6 border-b border-stone-800 pb-2 w-[85%] text-center">
-                  Website Merchandise Untuk Brand Dengan Sistem Pre-Order
-                </p>
-
-                <ul className="flex flex-wrap justify-center gap-1.5 mb-8 font-mono text-xs">
-                  <li className="border border-stone-700 bg-stone-900 text-stone-300 px-2.5 py-1">REACT.JS</li>
-                  <li className="border border-stone-700 bg-stone-900 text-stone-300 px-2.5 py-1">TAILWIND CSS</li>
-                </ul>
-
-                <div className="flex gap-3">
-                  <a
-                    href="https://reuc.vercel.app/"
-                    target="_blank"
-                    rel="noreferrer"
-                    className="border-2 border-white bg-white text-black hover:bg-stone-200 px-4 py-2 font-mono text-xs font-bold uppercase transition-colors"
-                  >
-                    LiveDEMO ↗
-                  </a>
-                </div>
-              </div>
-            </div>
-
-            {/* Project 4: Aneka Jajanan (60% Width) */}
-            <div
-              className="group relative w-full md:w-[60%] h-[350px] md:h-[400px] border-4 border-black bg-stone-900 overflow-hidden cursor-pointer shadow-[8px_8px_0_0_#000]"
-            >
-              {/* Mobile LiveBadge */}
-              <a href="https://anekajajanan.vercel.app/" target="_blank" rel="noreferrer" className="absolute top-4 right-4 bg-white text-black px-3 py-1 font-mono text-[10px] font-black uppercase border-2 border-black md:hidden shadow-[2px_2px_0_0_#000] z-[20]">
-                🔴 TAP FOR LIVE
-              </a>
-
-              {/* Image Layer */}
-              <div className="absolute inset-0 flex items-center justify-center select-none overflow-hidden transition-transform duration-500 group-hover:scale-105 bg-stone-200">
-                <img src={anekaJajananImg} alt="Aneka Jajanan" className="w-full h-full object-cover grayscale" />
+              <div className="project-image-wrapper" data-cursor-hover>
+                <a href={project.demoUrl} target="_blank" rel="noreferrer">
+                  <img src={project.image} alt={project.title} loading="lazy" />
+                </a>
               </div>
 
-              {/* Instant Hover Overlay */}
-              <div className="absolute inset-0 bg-black text-white flex flex-col items-center justify-center p-6 opacity-0 group-hover:opacity-100 transition-opacity duration-200 z-10">
-                <h3 className="text-3xl md:text-4xl font-black uppercase tracking-tight mb-1">
-                  ANEKA JAJANAN
-                </h3>
-                <p className="font-mono text-xs md:text-sm uppercase text-stone-400 mb-6 border-b border-stone-800 pb-2 w-[80%] text-center">
-                  Katalog Aneka Jajanan
-                </p>
-
-                <ul className="flex flex-wrap justify-center gap-2 mb-8 font-mono text-xs">
-                  <li className="border border-stone-700 bg-stone-900 text-stone-300 px-3 py-1">REACT.JS</li>
-                  <li className="border border-stone-700 bg-stone-900 text-stone-300 px-3 py-1">TAILWIND CSS</li>
-                </ul>
-
-                <div className="flex gap-4">
-                  <a
-                    href="https://anekajajanan.vercel.app/"
-                    target="_blank"
-                    rel="noreferrer"
-                    className="border-2 border-white bg-white text-black hover:bg-stone-200 px-5 py-2 font-mono text-sm font-bold uppercase transition-colors"
-                  >
-                    LiveDEMO ↗
-                  </a>
-                </div>
-              </div>
-            </div>
-
-          </div>
-        </section>
-
-        {/* 5. ABOUT ME SECTION */}
-        <section id="about" className="border-t-4 border-black pt-16 mb-24">
-          <div className="flex flex-col md:flex-row justify-between gap-12">
-
-            {/* Bio text (60%) */}
-            <div className="flex-[3] space-y-6">
-              <h2 className="text-4xl md:text-5xl font-black uppercase tracking-tighter relative inline-block select-none">
-                ABOUT ME
-                <span className="absolute left-0 bottom-0.5 w-full h-[6px] bg-stone-300 -z-10"></span>
-              </h2>
-              <p className="font-mono text-stone-600 leading-relaxed text-sm md:text-base uppercase bg-stone-50 p-4 border-l-4 border-black">
-                Saya adalah pengembang perangkat lunak yang berfokus pada efisiensi baris kode, arsitektur data yang kokoh, dan pengalaman pengguna yang intuitif. Memiliki ketertarikan tinggi pada performa website modern, optimalisasi backend, dan desain antarmuka yang presisi.
-              </p>
-              <p className="font-mono text-stone-600 leading-relaxed text-sm md:text-base uppercase">
-                Dengan pengalaman mengintegrasikan berbagai framework web modern dan arsitektur database, saya berkomitmen menciptakan aplikasi berkinerja tinggi yang andal, aman, dan mudah dikelola.
-              </p>
-            </div>
-
-            {/* About Photo Panel (30%) */}
-            <div className="flex-[2] flex items-center justify-center w-full">
-              <div className="w-full max-w-[280px] aspect-square bg-transparent relative select-none overflow-hidden">
-                <video
-                  src={aboutVideo}
-                  autoPlay
-                  loop
-                  muted
-                  playsInline
-                  className="absolute inset-0 w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-300 pointer-events-none mix-blend-multiply brightness-110"
-                />
-              </div>
-            </div>
-
-          </div>
-
-          {/* Full-width Toolkit Grid */}
-          <div className="mt-20 border-t-2 border-dashed border-stone-300 pt-16">
-            <h3 className="font-mono text-xs font-black uppercase text-stone-500 mb-10 tracking-wider">
-              Tool Yang Saya Pakai:
-            </h3>
-            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-y-12 gap-x-6 text-center select-none">
-
-              {/* HTML */}
-              <div className="flex flex-col items-center group">
-                <div className="w-16 h-16 flex items-center justify-center border-2 border-transparent group-hover:border-black transition-all p-2 bg-transparent shadow-none group-hover:shadow-[4px_4px_0_0_#000]">
-                  <img src={htmlLogo} alt="HTML Logo" className="w-12 h-12 object-contain grayscale group-hover:grayscale-0 transition-all duration-300" />
-                </div>
-                <span className="mt-3 font-mono text-[11px] font-bold uppercase text-stone-700 group-hover:text-black tracking-wider transition-colors duration-300">HTML</span>
-              </div>
-
-              {/* CSS */}
-              <div className="flex flex-col items-center group">
-                <div className="w-16 h-16 flex items-center justify-center border-2 border-transparent group-hover:border-black transition-all p-2 bg-transparent shadow-none group-hover:shadow-[4px_4px_0_0_#000]">
-                  <img src={cssLogo} alt="CSS Logo" className="w-12 h-12 object-contain grayscale group-hover:grayscale-0 transition-all duration-300" />
-                </div>
-                <span className="mt-3 font-mono text-[11px] font-bold uppercase text-stone-700 group-hover:text-black tracking-wider transition-colors duration-300">CSS</span>
-              </div>
-
-              {/* React.js */}
-              <div className="flex flex-col items-center group">
-                <div className="w-16 h-16 flex items-center justify-center border-2 border-transparent group-hover:border-black transition-all p-2 bg-transparent shadow-none group-hover:shadow-[4px_4px_0_0_#000]">
-                  <img src={reactLogo} alt="React.js Logo" className="w-12 h-12 object-contain grayscale group-hover:grayscale-0 transition-all duration-300" />
-                </div>
-                <span className="mt-3 font-mono text-[11px] font-bold uppercase text-stone-700 group-hover:text-black tracking-wider transition-colors duration-300">React.js</span>
-              </div>
-
-              {/* Next.js */}
-              <div className="flex flex-col items-center group">
-                <div className="w-16 h-16 flex items-center justify-center border-2 border-transparent group-hover:border-black transition-all p-2 bg-transparent shadow-none group-hover:shadow-[4px_4px_0_0_#000]">
-                  <img src={nextjsLogo} alt="Next.js Logo" className="w-12 h-12 object-contain grayscale group-hover:grayscale-0 transition-all duration-300" />
-                </div>
-                <span className="mt-3 font-mono text-[11px] font-bold uppercase text-stone-700 group-hover:text-black tracking-wider transition-colors duration-300">Next.js</span>
-              </div>
-
-              {/* TypeScript */}
-              <div className="flex flex-col items-center group">
-                <div className="w-16 h-16 flex items-center justify-center border-2 border-transparent group-hover:border-black transition-all p-2 bg-transparent shadow-none group-hover:shadow-[4px_4px_0_0_#000]">
-                  <img src={typescriptLogo} alt="TypeScript Logo" className="w-12 h-12 object-contain grayscale group-hover:grayscale-0 transition-all duration-300" />
-                </div>
-                <span className="mt-3 font-mono text-[11px] font-bold uppercase text-stone-700 group-hover:text-black tracking-wider transition-colors duration-300">TypeScript</span>
-              </div>
-
-              {/* Tailwind CSS */}
-              <div className="flex flex-col items-center group">
-                <div className="w-16 h-16 flex items-center justify-center border-2 border-transparent group-hover:border-black transition-all p-2 bg-transparent shadow-none group-hover:shadow-[4px_4px_0_0_#000]">
-                  <img src={tailwindLogo} alt="Tailwind CSS Logo" className="w-12 h-12 object-contain grayscale group-hover:grayscale-0 transition-all duration-300" />
-                </div>
-                <span className="mt-3 font-mono text-[11px] font-bold uppercase text-stone-700 group-hover:text-black tracking-wider transition-colors duration-300">Tailwind CSS</span>
-              </div>
-
-              {/* Node.js */}
-              <div className="flex flex-col items-center group">
-                <div className="w-16 h-16 flex items-center justify-center border-2 border-transparent group-hover:border-black transition-all p-2 bg-transparent shadow-none group-hover:shadow-[4px_4px_0_0_#000]">
-                  <img src={nodejsLogo} alt="Node.js Logo" className="w-12 h-12 object-contain grayscale group-hover:grayscale-0 transition-all duration-300" />
-                </div>
-                <span className="mt-3 font-mono text-[11px] font-bold uppercase text-stone-700 group-hover:text-black tracking-wider transition-colors duration-300">Node.js</span>
-              </div>
-
-              {/* PostgreSQL */}
-              <div className="flex flex-col items-center group">
-                <div className="w-16 h-16 flex items-center justify-center border-2 border-transparent group-hover:border-black transition-all p-2 bg-transparent shadow-none group-hover:shadow-[4px_4px_0_0_#000]">
-                  <img src={postgresqlLogo} alt="PostgreSQL Logo" className="w-12 h-12 object-contain grayscale group-hover:grayscale-0 transition-all duration-300" />
-                </div>
-                <span className="mt-3 font-mono text-[11px] font-bold uppercase text-stone-700 group-hover:text-black tracking-wider transition-colors duration-300">PostgreSQL</span>
-              </div>
-
-              {/* Java */}
-              <div className="flex flex-col items-center group">
-                <div className="w-16 h-16 flex items-center justify-center border-2 border-transparent group-hover:border-black transition-all p-2 bg-transparent shadow-none group-hover:shadow-[4px_4px_0_0_#000]">
-                  <img src={javaLogo} alt="Java Logo" className="w-12 h-12 object-contain grayscale group-hover:grayscale-0 transition-all duration-300" />
-                </div>
-                <span className="mt-3 font-mono text-[11px] font-bold uppercase text-stone-700 group-hover:text-black tracking-wider transition-colors duration-300">Java</span>
-              </div>
-
-              {/* C++ */}
-              <div className="flex flex-col items-center group">
-                <div className="w-16 h-16 flex items-center justify-center border-2 border-transparent group-hover:border-black transition-all p-2 bg-transparent shadow-none group-hover:shadow-[4px_4px_0_0_#000]">
-                  <img src={cppLogo} alt="C++ Logo" className="w-12 h-12 object-contain grayscale group-hover:grayscale-0 transition-all duration-300" />
-                </div>
-                <span className="mt-3 font-mono text-[11px] font-bold uppercase text-stone-700 group-hover:text-black tracking-wider transition-colors duration-300">C++</span>
-              </div>
-            </div>
-          </div>
-
-        </section>
-
-      </div>
-
-      {/* 6. CONTACT SECTION */}
-      <section id="contact" className="border-t-4 border-black bg-stone-200 py-16 px-6">
-        <div className="max-w-6xl mx-auto flex flex-col md:flex-row justify-between gap-12">
-
-          {/* Left Column (30%) - Connect */}
-          <div className="flex-[2] space-y-6">
-            <h2 className="text-4xl md:text-5xl font-black uppercase tracking-tighter inline-block relative select-none">
-              HUBUNGI SAYA
-              <span className="absolute left-0 bottom-0.5 w-full h-[6px] bg-white -z-10"></span>
-            </h2>
-
-            <p className="font-mono text-sm text-stone-600 uppercase">
-              Tertarik bekerja sama atau memiliki pertanyaan? Hubungi saya secara langsung melalui form di samping atau temukan saya di kanal media sosial berikut.
-            </p>
-
-            <div className="space-y-3 pt-4 font-mono text-sm">
+              <div className="project-title-overlay">{project.title}</div>
+              <div className="project-subtitle-overlay">{project.subtitle}</div>
 
               <a
-                href="https://github.com/Arroychaan"
+                href={project.demoUrl}
                 target="_blank"
                 rel="noreferrer"
-                className="group flex items-center gap-3 border-2 border-black bg-white hover:bg-black hover:text-white p-3 font-bold transition-all w-full md:max-w-xs shadow-[4px_4px_0_0_#000] hover:shadow-none translate-y-0 active:translate-y-1"
+                className="project-link-overlay hidden md:block"
               >
-                <img src={githubIcon} alt="" className="w-5 h-5 object-contain group-hover:invert transition-all duration-200" />
-                <span>GITHUB PROFILE</span>
+                Live Demo ↗
               </a>
-              <a
-                href="https://www.linkedin.com/in/achmad-roychan-87459724b/"
-                target="_blank"
-                rel="noreferrer"
-                className="group flex items-center gap-3 border-2 border-black bg-white hover:bg-black hover:text-white p-3 font-bold transition-all w-full md:max-w-xs shadow-[4px_4px_0_0_#000] hover:shadow-none translate-y-0 active:translate-y-1"
-              >
-                <img src={linkedinIcon} alt="" className="w-5 h-5 object-contain group-hover:invert transition-all duration-200" />
-                <span>LINKEDIN PROFILE</span>
-              </a>
-              <a
-                href="https://www.instagram.com/ar.roychan/"
-                target="_blank"
-                rel="noreferrer"
-                className="group flex items-center gap-3 border-2 border-black bg-white hover:bg-black hover:text-white p-3 font-bold transition-all w-full md:max-w-xs shadow-[4px_4px_0_0_#000] hover:shadow-none translate-y-0 active:translate-y-1"
-              >
-                <img src={instagramIcon} alt="" className="w-5 h-5 object-contain group-hover:invert transition-all duration-200" />
-                <span>INSTAGRAM PROFILE</span>
-              </a>
+
+              <div className="project-tech-list">
+                {project.technologies.map((tech) => (
+                  <span key={tech} className="project-tech-tag">{tech}</span>
+                ))}
+              </div>
             </div>
-          </div>
-
-          <div className="flex-[3] bg-[#fafaf9] border-4 border-black p-6 md:p-8 shadow-[8px_8px_0_0_#000]">
-            <form onSubmit={handleSubmit} className="space-y-6 font-mono text-sm">
-              {/* Web3Forms Configurations */}
-              <input type="hidden" name="access_key" value="c8399c3d-17c5-49c2-9432-d09aab289e5c" />
-              <input type="hidden" name="subject" value="Pesan Baru dari Portofolio roychan501.tech" />
-              <input type="hidden" name="from_name" value="Kontak Portofolio" />
-
-              <div>
-                <label htmlFor="name" className="block text-xs font-bold uppercase tracking-wider text-stone-500 mb-2">
-                  Nama Anda
-                </label>
-                <input
-                  type="text"
-                  id="name"
-                  name="name"
-                  required
-                  placeholder="ACHMAD ROYCHAN"
-                  className="w-full border-2 border-black p-3 bg-stone-50 focus:outline-none focus:bg-white focus:ring-2 focus:ring-stone-400 placeholder-stone-400 text-stone-900 font-bold uppercase rounded-none"
-                />
-              </div>
-
-              <div>
-                <label htmlFor="email" className="block text-xs font-bold uppercase tracking-wider text-stone-500 mb-2">
-                  Alamat Email
-                </label>
-                <input
-                  type="email"
-                  id="email"
-                  name="email"
-                  required
-                  placeholder="USER@DOMAIN.COM"
-                  className="w-full border-2 border-black p-3 bg-stone-50 focus:outline-none focus:bg-white focus:ring-2 focus:ring-stone-400 placeholder-stone-400 text-stone-900 font-bold uppercase rounded-none"
-                />
-              </div>
-
-              <div>
-                <label htmlFor="message" className="block text-xs font-bold uppercase tracking-wider text-stone-500 mb-2">
-                  Pesan Anda
-                </label>
-                <textarea
-                  id="message"
-                  name="message"
-                  rows={5}
-                  required
-                  placeholder="TULISKAN DETAIL PROYEK ATAU PESAN..."
-                  className="w-full border-2 border-black p-3 bg-stone-50 focus:outline-none focus:bg-white focus:ring-2 focus:ring-stone-400 placeholder-stone-400 text-stone-900 font-bold uppercase rounded-none resize-none"
-                ></textarea>
-              </div>
-
-              <button
-                type="submit"
-                disabled={formStatus === 'submitting'}
-                className={`w-full border-2 border-black p-4 font-bold uppercase transition-all shadow-[4px_4px_0_0_#78716c] hover:shadow-none translate-y-0 active:translate-y-1 ${formStatus === 'submitting'
-                  ? 'bg-stone-300 text-stone-600 cursor-not-allowed shadow-none translate-y-1'
-                  : formStatus === 'success'
-                    ? 'bg-green-600 text-white border-green-700'
-                    : 'bg-black text-white hover:bg-stone-100 hover:text-black'
-                  }`}
-              >
-                {formStatus === 'submitting'
-                  ? 'MENGIRIM...'
-                  : formStatus === 'success'
-                    ? 'TERKIRIM ✓'
-                    : 'KIRIM PESAN ↗'}
-              </button>
-            </form>
-          </div>
-
+          ))}
         </div>
       </section>
 
-      {/* 7. FOOTER */}
-      <footer className="bg-black text-[#fafaf9] py-8 px-6 border-t-4 border-black">
-        <div className="max-w-6xl mx-auto flex flex-col md:flex-row justify-between items-center gap-4 font-mono text-xs text-stone-400">
-          <div className="text-center md:text-left font-bold uppercase">
-            Roychan501
-          </div>
-          <div className="text-center md:text-right">
-            © 2026 ACHMAD ROYCHAN. ALL RIGHTS RESERVED.
+      {/* ══ ABOUT ══ */}
+      <section id="about" className="py-32 md:py-48 px-6 md:px-12 section-reveal">
+        <div className="max-w-[1000px] mx-auto">
+          <span className="font-mono text-[10px] uppercase tracking-[0.2em] text-[var(--text-muted)] mb-12 block">
+            About
+          </span>
+          <p ref={aboutTextRef} className="about-text">
+            {aboutWords.map((word, i) => (
+              <span key={i} className="word">{word}</span>
+            ))}
+          </p>
+        </div>
+      </section>
+
+      {/* ══ TECH STACK ══ */}
+      <section ref={techRef} className="py-24 md:py-32 px-6 md:px-12 section-reveal">
+        <div className="max-w-[1000px] mx-auto">
+          <span className="font-mono text-[10px] uppercase tracking-[0.2em] text-[var(--text-muted)] mb-16 block">
+            Tech Stack
+          </span>
+          <div className="grid grid-cols-3 sm:grid-cols-5 gap-12 md:gap-16">
+            {techStack.map((tech) => (
+              <div key={tech.name} className="tech-icon-wrapper" data-cursor-hover>
+                <img src={tech.icon} alt={tech.name} />
+                <span>{tech.name}</span>
+              </div>
+            ))}
           </div>
         </div>
+      </section>
+
+      {/* ══ CONTACT ══ */}
+      <section ref={contactRef} id="contact" className="py-32 md:py-48 px-6 md:px-12 border-t border-[var(--border)]">
+        <div className="max-w-[1000px] mx-auto">
+          <span className="font-mono text-[10px] uppercase tracking-[0.2em] text-[var(--text-muted)] mb-12 block section-reveal">
+            Get In Touch
+          </span>
+
+          {/* Giant CTA text */}
+          <div className="mb-20 section-reveal">
+            <a
+              href="mailto:achmadroychan@gmail.com"
+              className="contact-giant-text block"
+              data-cursor-hover
+            >
+              LET'S WORK<br />TOGETHER
+            </a>
+          </div>
+
+          {/* Two columns: socials + form */}
+          <div className="flex flex-col md:flex-row gap-16 md:gap-24 section-reveal">
+            {/* Socials */}
+            <div className="flex-[2] space-y-6">
+              <h3 className="font-mono text-xs uppercase tracking-widest text-[var(--text-muted)] mb-6">Connect</h3>
+              <div className="space-y-3">
+                <a href="https://github.com/Arroychaan" target="_blank" rel="noreferrer" className="flex items-center gap-3 font-mono text-sm text-[var(--text)] hover:text-[var(--accent)] transition-colors group" data-cursor-hover>
+                  <img src={githubIcon} alt="" className="w-4 h-4 invert opacity-60 group-hover:opacity-100 transition-opacity" />
+                  GitHub
+                </a>
+                <a href="https://www.linkedin.com/in/achmad-roychan-87459724b/" target="_blank" rel="noreferrer" className="flex items-center gap-3 font-mono text-sm text-[var(--text)] hover:text-[var(--accent)] transition-colors group" data-cursor-hover>
+                  <img src={linkedinIcon} alt="" className="w-4 h-4 invert opacity-60 group-hover:opacity-100 transition-opacity" />
+                  LinkedIn
+                </a>
+                <a href="https://www.instagram.com/ar.roychan/" target="_blank" rel="noreferrer" className="flex items-center gap-3 font-mono text-sm text-[var(--text)] hover:text-[var(--accent)] transition-colors group" data-cursor-hover>
+                  <img src={instagramIcon} alt="" className="w-4 h-4 invert opacity-60 group-hover:opacity-100 transition-opacity" />
+                  Instagram
+                </a>
+              </div>
+            </div>
+
+            {/* Contact Form */}
+            <div className="flex-[3]">
+              <form onSubmit={handleSubmit} className="space-y-6 font-mono text-sm">
+                <input type="hidden" name="access_key" value="c8399c3d-17c5-49c2-9432-d09aab289e5c" />
+                <input type="hidden" name="subject" value="Pesan Baru dari Portofolio roychan501.tech" />
+                <input type="hidden" name="from_name" value="Kontak Portofolio" />
+
+                <div>
+                  <label htmlFor="name" className="block text-[10px] font-bold uppercase tracking-widest text-[var(--text-muted)] mb-2">Nama</label>
+                  <input
+                    type="text" id="name" name="name" required placeholder="Nama Anda"
+                    className="w-full bg-transparent border-b border-[var(--border-light)] focus:border-[var(--accent)] p-3 text-[var(--text)] placeholder-[var(--text-muted)] focus:outline-none transition-colors"
+                  />
+                </div>
+                <div>
+                  <label htmlFor="email" className="block text-[10px] font-bold uppercase tracking-widest text-[var(--text-muted)] mb-2">Email</label>
+                  <input
+                    type="email" id="email" name="email" required placeholder="email@domain.com"
+                    className="w-full bg-transparent border-b border-[var(--border-light)] focus:border-[var(--accent)] p-3 text-[var(--text)] placeholder-[var(--text-muted)] focus:outline-none transition-colors"
+                  />
+                </div>
+                <div>
+                  <label htmlFor="message" className="block text-[10px] font-bold uppercase tracking-widest text-[var(--text-muted)] mb-2">Pesan</label>
+                  <textarea
+                    id="message" name="message" rows={4} required placeholder="Detail proyek atau pesan..."
+                    className="w-full bg-transparent border-b border-[var(--border-light)] focus:border-[var(--accent)] p-3 text-[var(--text)] placeholder-[var(--text-muted)] focus:outline-none transition-colors resize-none"
+                  />
+                </div>
+
+                <button
+                  type="submit"
+                  disabled={formStatus === 'submitting'}
+                  data-cursor-hover
+                  className={`font-mono text-xs uppercase tracking-widest py-4 px-8 border transition-all duration-300 ${
+                    formStatus === 'submitting'
+                      ? 'border-[var(--text-muted)] text-[var(--text-muted)] cursor-wait'
+                      : formStatus === 'success'
+                        ? 'border-green-500 text-green-500'
+                        : 'border-[var(--accent)] text-[var(--accent)] hover:bg-[var(--accent)] hover:text-[var(--bg)]'
+                  }`}
+                >
+                  {formStatus === 'submitting' ? 'MENGIRIM...' : formStatus === 'success' ? 'TERKIRIM ✓' : 'KIRIM PESAN ↗'}
+                </button>
+              </form>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ══ FOOTER ══ */}
+      <footer className="py-8 px-6 md:px-12 border-t border-[var(--border)]">
+        <div className="max-w-[1400px] mx-auto flex flex-col md:flex-row justify-between items-center gap-4 font-mono text-[10px] tracking-widest uppercase text-[var(--text-muted)]">
+          <span>Roychan501</span>
+          <span>© 2026 Achmad Roychan. All Rights Reserved.</span>
+        </div>
       </footer>
-    </div>
+    </>
   );
 };
 
